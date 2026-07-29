@@ -1,0 +1,10 @@
+# facilitator notes, not for publishing
+WORKSHOP-HANDOFF.md
+
+# macos
+.DS_Store
+
+# editors
+.vscode/
+.idea/
+*.swp

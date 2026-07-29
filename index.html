@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the dev flow · a hands-on workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12101C; --card:#1B1829; --card2:#231F35; --line:#2E2942;
+  --body:#E9E4F5; --muted:#8A83A8; --ui:#B9A5FF;
+  --plan:#8B7BE8; --build:#7EE0BE; --check:#F5C57A; --ship:#FF8B7A;
+  --sans:'Space Grotesk',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --pad:clamp(26px,4.6vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--body);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--ui);outline-offset:3px;border-radius:4px}
+
+#deck{position:fixed;inset:0}
+.slide{
+  position:absolute;inset:0;padding:var(--pad);padding-bottom:calc(var(--pad) + 56px);
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transform:translateY(18px);
+  transition:opacity .36s ease,transform .36s cubic-bezier(.2,.7,.3,1),visibility .36s;
+}
+.slide.active{opacity:1;visibility:visible;transform:none}
+
+.eyebrow{font-size:13px;letter-spacing:.13em;color:var(--muted);font-family:var(--mono);margin-bottom:20px}
+.eyebrow b{color:var(--ui);font-weight:500}
+h1{font-size:clamp(36px,6.2vw,82px);font-weight:700;line-height:1.03;letter-spacing:-.03em}
+h2{font-size:clamp(26px,4vw,54px);font-weight:500;line-height:1.11;letter-spacing:-.02em}
+h3{font-size:clamp(19px,2.2vw,29px);font-weight:500;line-height:1.26}
+p{font-size:clamp(15px,1.45vw,20px);line-height:1.6;color:var(--muted);max-width:58ch}
+p strong{color:var(--body);font-weight:500}
+p code,li code,h2 code,h3 code{font-family:var(--mono);color:var(--ui);font-size:.92em}
+.term{font-family:var(--mono);font-size:clamp(17px,1.9vw,25px);font-weight:500;color:var(--ui);margin-top:12px;display:inline-block}
+.stack>*+*{margin-top:18px}
+.frag{opacity:0;transform:translateY(10px);transition:opacity .32s ease,transform .32s cubic-bezier(.2,.7,.3,1)}
+.frag.on{opacity:1;transform:none}
+.cursor{display:inline-block;width:.5em;height:.86em;background:var(--ui);vertical-align:-.06em;margin-left:.12em;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+.slide.act{justify-content:center}
+.actnum{font-family:var(--mono);font-size:14px;letter-spacing:.16em;color:var(--ui);margin-bottom:18px}
+.slide.act h1{max-width:16ch}
+.actdo{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+.actdo span{font-family:var(--mono);font-size:14px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 16px}
+
+.day{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+.row{display:grid;grid-template-columns:58px 16px 1fr;align-items:center;gap:14px}
+.row .t{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
+.row .dot{width:9px;height:9px;border-radius:50%;background:var(--line);margin-left:3px;transition:background .4s}
+.row .bodyc{background:var(--card);border-left:3px solid var(--line);padding:9px 17px;border-radius:0 6px 6px 0;transition:border-color .4s}
+.row .bodyc b{font-weight:500;font-size:clamp(14px,1.45vw,19px);display:block}
+.row .bodyc span{font-size:clamp(11px,1.05vw,14px);color:var(--muted)}
+.row .bodyc code{font-family:var(--mono);color:var(--build);font-size:.95em}
+.row[data-stage=plan] .dot{background:var(--plan)} .row[data-stage=plan] .bodyc{border-left-color:var(--plan)}
+.row[data-stage=build] .dot{background:var(--build)} .row[data-stage=build] .bodyc{border-left-color:var(--build)}
+.row[data-stage=check] .dot{background:var(--check)} .row[data-stage=check] .bodyc{border-left-color:var(--check)}
+.row[data-stage=ship] .dot{background:var(--ship)} .row[data-stage=ship] .bodyc{border-left-color:var(--ship)}
+
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.stg{background:var(--card);border-top:3px solid var(--line);border-radius:0 0 10px 10px;padding:18px 20px}
+.stg b{font-family:var(--mono);font-size:15px;display:block;margin-bottom:8px;font-weight:500}
+.stg span{font-size:14px;color:var(--muted);line-height:1.5}
+.stg[data-k=plan]{border-top-color:var(--plan)} .stg[data-k=plan] b{color:var(--plan)}
+.stg[data-k=build]{border-top-color:var(--build)} .stg[data-k=build] b{color:var(--build)}
+.stg[data-k=check]{border-top-color:var(--check)} .stg[data-k=check] b{color:var(--check)}
+.stg[data-k=ship]{border-top-color:var(--ship)} .stg[data-k=ship] b{color:var(--ship)}
+
+.cmd{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 26px;display:flex;align-items:center;gap:18px;margin-top:6px}
+.cmd+.cmd{margin-top:12px}
+.cmd code{font-family:var(--mono);font-weight:500;color:var(--build);font-size:clamp(18px,2.6vw,35px);letter-spacing:-.01em;flex:1;word-break:break-word}
+.cmd .os{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 11px;flex:none;white-space:nowrap}
+.copy{font-family:var(--mono);font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px 13px;flex:none;transition:.16s}
+.copy:hover{color:var(--body);border-color:var(--ui)}
+.copy.done{color:var(--build);border-color:var(--build)}
+.expect{margin-top:16px;font-family:var(--mono);font-size:clamp(12px,1.25vw,16px);color:var(--muted);background:var(--card2);border-radius:8px;padding:15px 19px;white-space:pre-wrap;line-height:1.55}
+.expect em{color:var(--build);font-style:normal}
+.expect s{color:var(--ship);text-decoration:none}
+.expect code{font-family:var(--mono);color:var(--ui)}
+
+.slide.checkpoint{align-items:center;text-align:center}
+.slide.checkpoint h2{max-width:21ch}
+.slide.checkpoint p{max-width:46ch}
+.ring{width:70px;height:70px;border-radius:50%;border:2px solid var(--build);margin-bottom:30px;display:grid;place-items:center;color:var(--build);font-family:var(--mono);font-size:25px}
+.slide.checkpoint.active .ring{animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(126,224,190,.34)}70%,100%{box-shadow:0 0 0 26px rgba(126,224,190,0)}}
+
+.split{display:grid;gap:14px;margin-top:6px}
+.pane{border-radius:12px;padding:22px 26px;background:var(--card)}
+.pane.pain{border-left:3px solid var(--ship)}
+.pane.fix{border-left:3px solid var(--build)}
+.pane .tag{font-family:var(--mono);font-size:12px;letter-spacing:.11em;margin-bottom:10px;display:block}
+.pane.pain .tag{color:var(--ship)} .pane.fix .tag{color:var(--build)}
+.pane h3{margin-bottom:8px}
+.pane p{font-size:clamp(14px,1.3vw,18px)}
+
+.reflog{display:grid;place-items:center;gap:26px;margin-top:14px;min-height:min(34vh,270px)}
+.commit{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 28px;font-family:var(--mono);text-align:center;transition:transform .62s cubic-bezier(.5,0,.75,0),opacity .5s ease,border-color .4s}
+.commit .hash{color:var(--ui);font-size:15px}
+.commit .msg{font-size:clamp(15px,1.7vw,22px);color:var(--body);margin-top:7px;font-weight:500}
+.slide[data-frag="1"] .commit{transform:translateY(115%) rotate(9deg);opacity:0}
+.slide[data-frag="2"] .commit{transform:none;opacity:1;border-color:var(--build);transition:transform .7s cubic-bezier(.2,1.5,.4,1),opacity .3s ease,border-color .4s}
+.verdict{font-size:clamp(19px,2.5vw,33px);font-weight:500;text-align:center;min-height:1.4em}
+.slide[data-frag="1"] .verdict{color:var(--ship)}
+.slide[data-frag="2"] .verdict{color:var(--build)}
+
+.graph{margin-top:18px}
+.graph svg{width:100%;max-height:32vh}
+.gline{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:700;stroke-dashoffset:700}
+.slide.active .gline{animation:draw 1.1s cubic-bezier(.4,0,.2,1) forwards}
+.slide.active .gline.d2{animation-delay:.5s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.gdot{opacity:0;transform-box:fill-box;transform-origin:center}
+.slide.active .gdot{animation:pop .4s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+.glabel{font-family:'JetBrains Mono',monospace;font-size:13px;fill:#8A83A8}
+
+.file{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.file .fh{font-family:var(--mono);font-size:13px;color:var(--muted);padding:11px 20px;border-bottom:1px solid var(--line);background:var(--card2)}
+.file ul{list-style:none;padding:14px 20px}
+.file li{font-family:var(--mono);font-size:clamp(13px,1.35vw,18px);line-height:1.95;color:var(--body)}
+.file li::before{content:'— ';color:var(--build)}
+.file li i{font-style:normal;color:var(--muted);font-size:.8em;font-family:var(--sans)}
+
+.prompt{background:var(--card);border-left:3px solid var(--ui);border-radius:0 12px 12px 0;padding:24px 28px;margin-top:16px;font-family:var(--mono);font-size:clamp(15px,1.7vw,22px);line-height:1.62;color:var(--body)}
+.prompt v{color:var(--check);font-style:normal}
+
+.conflict{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.conflict .c{background:var(--card);border-radius:10px;padding:18px 22px;font-family:var(--mono);font-size:clamp(12px,1.3vw,16px);line-height:1.7}
+.conflict .c b{display:block;font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:400;letter-spacing:.1em}
+.conflict .c.a{border-left:3px solid var(--build)} .conflict .c.b{border-left:3px solid var(--check)}
+
+.cheat{display:grid;gap:10px;margin-top:18px}
+.cheat .r{display:grid;grid-template-columns:1fr 1fr;gap:16px;background:var(--card);border-radius:10px;padding:15px 22px;align-items:center}
+.cheat .r .q{font-size:clamp(14px,1.4vw,19px)}
+.cheat .r .a{font-family:var(--mono);color:var(--build);font-size:clamp(13px,1.3vw,18px);font-weight:500}
+
+.wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:12px;margin-top:22px}
+.wcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;opacity:0;transform:translateY(26px) scale(.9)}
+.slide.active .wcard{animation:land .5s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes land{to{opacity:1;transform:none}}
+.wcard .em{font-size:26px}
+.wcard .nm{font-family:var(--mono);font-size:14px;margin-top:9px;color:var(--body)}
+.wcard .rl{font-size:12px;color:var(--muted);margin-top:3px}
+
+.recap{list-style:none;margin-top:20px;display:grid;gap:11px;max-width:66ch}
+.recap li{font-size:clamp(15px,1.65vw,22px);line-height:1.45;padding-left:30px;position:relative}
+.recap li::before{content:'✓';position:absolute;left:0;color:var(--build);font-family:var(--mono)}
+.recap li i{font-style:normal;color:var(--muted);font-family:var(--mono);font-size:.8em}
+
+.slide.brk{align-items:center;text-align:center}
+.slide.brk h1{color:var(--ui)}
+
+#gcard{position:fixed;right:24px;bottom:76px;z-index:40;width:min(300px,42vw);background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--ui);border-radius:0 10px 10px 0;padding:15px 19px;opacity:0;transform:translateX(24px);pointer-events:none;transition:.34s ease}
+#gcard.on{opacity:1;transform:none}
+#gcard .k{font-family:var(--mono);color:var(--ui);font-size:16px;font-weight:500}
+#gcard .v{font-size:14px;color:var(--muted);margin-top:5px;line-height:1.5}
+
+#strip{position:fixed;left:0;right:0;bottom:0;height:56px;z-index:30;display:flex;align-items:center;gap:2px;padding:0 var(--pad);border-top:1px solid var(--line);background:var(--bg)}
+#strip .st{flex:1;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted);padding:7px 0;border-top:2px solid transparent;transition:.3s}
+#strip .st[data-on="1"]{color:var(--body)}
+#strip .st[data-k=plan][data-on="1"]{border-top-color:var(--plan)}
+#strip .st[data-k=build][data-on="1"]{border-top-color:var(--build)}
+#strip .st[data-k=check][data-on="1"]{border-top-color:var(--check)}
+#strip .st[data-k=ship][data-on="1"]{border-top-color:var(--ship)}
+#strip .num{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none;margin-left:18px}
+#clock{position:fixed;top:20px;right:24px;z-index:30;text-align:right;font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.5}
+#clock .seg{color:var(--ui)}
+#clock.over .el{color:var(--check)}
+#bar{position:fixed;top:0;left:0;height:2px;background:var(--ui);z-index:31;transition:width .36s ease}
+#help{position:fixed;left:var(--pad);top:20px;z-index:30;font-family:var(--mono);font-size:12px;color:var(--muted)}
+#help kbd{color:var(--body)}
+
+#notes{position:fixed;left:0;right:0;bottom:56px;z-index:35;background:var(--card2);border-top:1px solid var(--line);padding:18px var(--pad);display:none;font-size:15px;line-height:1.6;color:var(--muted);max-height:40vh;overflow:auto}
+body.notes-on #notes{display:block}
+#notes b{color:var(--body);font-weight:500}
+#notes code{font-family:var(--mono);color:var(--ui)}
+
+.sheet{position:fixed;inset:0;z-index:50;background:var(--bg);padding:var(--pad);overflow:auto;display:none}
+body.ov-on #overview,body.gl-on #glossary{display:block}
+.sheet h4{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:400;margin-bottom:22px}
+.ovgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px}
+.ovcell{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:left;font-size:14px;line-height:1.4;transition:.16s}
+.ovcell:hover{border-color:var(--ui)}
+.ovcell .n{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-bottom:6px}
+.glgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:10px}
+.glcell{background:var(--card);border-left:3px solid var(--ui);border-radius:0 10px 10px 0;padding:15px 18px}
+.glcell .k{font-family:var(--mono);color:var(--ui);font-size:15px;font-weight:500}
+.glcell .v{font-size:14px;color:var(--muted);margin-top:5px;line-height:1.5}
+
+@media (max-width:760px){
+  .row{grid-template-columns:48px 14px 1fr;gap:9px}
+  .conflict,.cheat .r{grid-template-columns:1fr}
+  #help{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+.note{display:none}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+<div id="help"><kbd>←</kbd> <kbd>→</kbd> move · <kbd>n</kbd> notes · <kbd>g</kbd> glossary · <kbd>o</kbd> all slides</div>
+<div id="clock"><span class="seg">—</span><br><span class="el">00:00</span> / <span class="bud">—</span></div>
+
+<main id="deck">
+
+<!-- ACT 0 -->
+
+<section class="slide" data-title="title" data-stage="plan" data-seg="welcome" data-budget="3">
+  <div class="stack">
+    <div class="eyebrow">carbonteq · 2 hours · you will type things</div>
+    <h1 style="max-width:22ch">how a change gets from your ticket to a real website<span class="cursor"></span></h1>
+    <p>and by the end of this, your name is on one. you clone the project, you make a change, you send it for review, and you watch it go live. all of it on your own laptop.</p>
+  </div>
+  <aside class="note"><b>open by naming the promise, not the agenda.</b> ask for a show of hands: who has had claude or cursor run a git command and then had no idea what it did? that count sets your pace. keep laptops shut until the act 1 opener.</aside>
+</section>
+
+<section class="slide" data-title="the next two hours" data-stage="plan" data-seg="welcome" data-budget="3">
+  <div class="eyebrow">no surprises · <b>here is the whole shape of it</b></div>
+  <h2>two hours, six stops</h2>
+  <div class="actdo" style="margin-top:32px">
+    <span>a dev's tuesday</span><span>your machine</span><span>git in four words</span><span>break</span><span>writing code with claude</span><span>the undo kit</span><span>shipping it</span>
+  </div>
+  <p style="margin-top:32px">three rules. one, <strong>stop me any time</strong>, there are no stupid questions in a room where four people are learning the same thing. two, <strong>nobody moves on alone</strong>, we wait for the slowest screen. three, <strong>you cannot break anything today</strong>, and by the end you'll know exactly why.</p>
+  <aside class="note"><b>the three rules are the contract, say them slowly.</b> rule two is what actually makes the session work, rule three is the thesis of the whole workshop. share the deck link now so they can follow along and copy commands off their own screens.</aside>
+</section>
+
+<section class="slide" data-title="a dev's tuesday" data-stage="plan" data-seg="a dev's tuesday" data-budget="12" data-frags="9">
+  <div class="eyebrow">before any tools · <b>just one normal day</b></div>
+  <h2>this is tuesday for a developer on your team</h2>
+  <div class="day">
+    <div class="row frag" data-frag="1"><div class="t">9:30</div><div class="dot"></div><div class="bodyc"><b>standup, picks up your ticket</b><span>the one you wrote last week</span></div></div>
+    <div class="row frag" data-frag="2"><div class="t">9:45</div><div class="dot"></div><div class="bodyc"><b>gets everyone else's work from yesterday</b><span>so he isn't building on something stale</span></div></div>
+    <div class="row frag" data-frag="3"><div class="t">9:47</div><div class="dot"></div><div class="bodyc"><b>makes his own copy of the project</b><span>so he can break things without breaking yours</span></div></div>
+    <div class="row frag" data-frag="4"><div class="t">9:50</div><div class="dot"></div><div class="bodyc"><b>runs the whole website on his laptop</b><span>a private version only he can see</span></div></div>
+    <div class="row frag" data-frag="5"><div class="t">10–1</div><div class="dot"></div><div class="bodyc"><b>writes code, often with claude</b><span>edit, save, refresh, repeat, for three hours</span></div></div>
+    <div class="row frag" data-frag="6"><div class="t">2:00</div><div class="dot"></div><div class="bodyc"><b>saves a checkpoint and sends it up</b><span>now it exists somewhere other than his laptop</span></div></div>
+    <div class="row frag" data-frag="7"><div class="t">2:10</div><div class="dot"></div><div class="bodyc"><b>asks a teammate to check it</b><span>before it goes anywhere near the real thing</span></div></div>
+    <div class="row frag" data-frag="8"><div class="t">2:30</div><div class="dot"></div><div class="bodyc"><b>gets comments, fixes them, sends again</b><span>usually two or three rounds of this</span></div></div>
+    <div class="row frag" data-frag="9"><div class="t">3:30</div><div class="dot"></div><div class="bodyc"><b>his copy joins the real one, and it goes live</b><span>now you can finally see it</span></div></div>
+  </div>
+  <aside class="note"><b>reveal one row at a time, narrate each in plain words. no tool names yet, on purpose.</b> the room should be nodding, not learning. ask them where in this day they usually appear. the answer is the first row and the last row, which sets up the slide after next.</aside>
+</section>
+
+<section class="slide" data-title="the day, with tools" data-stage="plan" data-seg="a dev's tuesday" data-budget="12">
+  <div class="eyebrow">same day · <b>now with the names</b></div>
+  <h2>every one of those moments has a tool</h2>
+  <div class="day">
+    <div class="row" data-stage="plan"><div class="t">9:30</div><div class="dot"></div><div class="bodyc"><b>standup, picks up your ticket</b><span>jira · linear · confluence</span></div></div>
+    <div class="row" data-stage="build"><div class="t">9:45</div><div class="dot"></div><div class="bodyc"><b><code>git pull</code></b><span>gets everyone else's work from yesterday</span></div></div>
+    <div class="row" data-stage="build"><div class="t">9:47</div><div class="dot"></div><div class="bodyc"><b><code>git checkout -b</code></b><span>makes his own copy of the project</span></div></div>
+    <div class="row" data-stage="build"><div class="t">9:50</div><div class="dot"></div><div class="bodyc"><b><code>npm install</code> · <code>npm run dev</code></b><span>runs the whole website on his laptop</span></div></div>
+    <div class="row" data-stage="build"><div class="t">10–1</div><div class="dot"></div><div class="bodyc"><b>vs code · claude</b><span>edit, save, refresh, repeat</span></div></div>
+    <div class="row" data-stage="build"><div class="t">2:00</div><div class="dot"></div><div class="bodyc"><b><code>git commit</code> · <code>git push</code></b><span>saves a checkpoint and sends it up to github</span></div></div>
+    <div class="row" data-stage="check"><div class="t">2:10</div><div class="dot"></div><div class="bodyc"><b>pull request</b><span>asks a teammate to check it</span></div></div>
+    <div class="row" data-stage="check"><div class="t">2:30</div><div class="dot"></div><div class="bodyc"><b>review · ci · tests</b><span>humans and robots both check it</span></div></div>
+    <div class="row" data-stage="ship"><div class="t">3:30</div><div class="dot"></div><div class="bodyc"><b>merge · deploy</b><span>his copy joins the real one and it goes live</span></div></div>
+  </div>
+  <aside class="note"><b>the sentence that makes this whole deck work:</b> "the tools are not a separate subject, they're just names for moments in that day." say the four stage names once, don't explain them, the next-but-one slide does that.</aside>
+</section>
+
+<section class="slide" data-title="your part" data-stage="plan" data-seg="a dev's tuesday" data-budget="12">
+  <div class="eyebrow">where you already live · <b>and what you're borrowing today</b></div>
+  <h2>you own the top row and the bottom row. today you're doing the middle.</h2>
+  <div class="day">
+    <div class="row" data-stage="plan"><div class="t">9:30</div><div class="dot"></div><div class="bodyc"><b>you wrote the ticket</b><span>already your job</span></div></div>
+    <div class="row" data-stage="build"><div class="t">9:45</div><div class="dot"></div><div class="bodyc"><b>get the project, make your copy, run it</b><span>you're doing this in about ten minutes</span></div></div>
+    <div class="row" data-stage="build"><div class="t">10–1</div><div class="dot"></div><div class="bodyc"><b>change something, with claude's help</b><span>you're doing this too</span></div></div>
+    <div class="row" data-stage="check"><div class="t">2:10</div><div class="dot"></div><div class="bodyc"><b>send it for review</b><span>and this</span></div></div>
+    <div class="row" data-stage="ship"><div class="t">3:30</div><div class="dot"></div><div class="bodyc"><b>you ask "is it live yet"</b><span>already your job too</span></div></div>
+  </div>
+  <aside class="note"><b>this is the reframe the whole session hangs on.</b> they're not learning a foreign subject, they're filling the gap between two things they already do every week. say it in exactly those words.</aside>
+</section>
+
+<section class="slide" data-title="the four stages" data-stage="plan" data-seg="a dev's tuesday" data-budget="12">
+  <div class="eyebrow">four colours · <b>they run along the bottom of every slide today</b></div>
+  <h2>everything in software fits in one of four buckets</h2>
+  <div class="stages">
+    <div class="stg" data-k="plan"><b>plan</b><span>deciding what to build. tickets, designs, standups. you already own this one.</span></div>
+    <div class="stg" data-k="build"><b>build</b><span>one person, one laptop, writing and running code. this is where we spend today.</span></div>
+    <div class="stg" data-k="check"><b>check</b><span>humans reviewing and robots testing, before anything counts.</span></div>
+    <div class="stg" data-k="ship"><b>ship</b><span>getting it in front of real users, and watching in case it breaks.</span></div>
+  </div>
+  <aside class="note"><b>point at the strip along the bottom of the screen.</b> it moves as we go, so at any point they can look down and know where they are. when someone gets lost later, don't re-explain, just point at the strip.</aside>
+</section>
+
+<!-- ACT 1 -->
+
+<section class="slide act" data-title="act · your machine" data-stage="build" data-seg="your machine" data-budget="15">
+  <div class="actnum">stop 2 of 6 · 15 minutes</div>
+  <h1>first, does your laptop have the four things</h1>
+  <div class="actdo"><span>the terminal</span><span>node</span><span>git</span><span>claude</span></div>
+  <p style="margin-top:24px">open your laptops now. we check all four, one at a time, and nobody moves on until every screen is green.</p>
+  <aside class="note"><b>laptops open from here to the end.</b> if the prereq email was done properly this takes eight minutes, not fifteen. the spare time is your buffer for the person who ignored it, and there is always one.</aside>
+</section>
+
+<section class="slide" data-title="explain · terminal" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="terminal|a window where you type commands to your computer instead of clicking things">
+  <div class="eyebrow">plain english first · <b>then the word</b></div>
+  <div class="stack">
+    <h2>a window where you type instructions instead of clicking them</h2>
+    <span class="term">the terminal</span>
+    <p>that's the whole idea. clicking a folder open and typing <code>cd folder</code> do exactly the same thing. devs type because it's faster, and because a typed instruction can be saved and run again tomorrow. <strong>nothing you type today can damage your laptop.</strong></p>
+  </div>
+  <aside class="note"><b>the fear here is real and worth thirty seconds.</b> say plainly: nothing in this session touches anything outside one folder we're about to download. the black window is not a hacker movie, it's a filing cabinet with a keyboard.</aside>
+</section>
+
+<section class="slide" data-title="command · open terminal" data-stage="build" data-seg="your machine" data-budget="15">
+  <div class="eyebrow">everyone do this now · <b>two different ways</b></div>
+  <h3 style="margin-bottom:18px">open your terminal</h3>
+  <div class="cmd"><span class="os">mac</span><code>cmd + space → "terminal"</code><button class="copy" data-copy="terminal">copy</button></div>
+  <div class="cmd"><span class="os">windows</span><code>start → "powershell"</code><button class="copy" data-copy="powershell">copy</button></div>
+  <aside class="note"><b>this is the only slide where mac and windows genuinely diverge in a way that matters.</b> find your windows people now and stand near them for the next ten minutes. everything after this is the same command on both.</aside>
+</section>
+
+<section class="slide" data-title="explain · node and npm" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="node|the program that lets your laptop run javascript outside a browser;;npm|the tool that downloads all the code your project depends on">
+  <div class="eyebrow">two words you'll hear constantly</div>
+  <div class="stack">
+    <h2>one runs the code. the other fetches the code other people wrote.</h2>
+    <span class="term">node · npm</span>
+    <p><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project depends on about 400 pieces of code written by strangers, and npm goes and gets all of them. when a dev says <strong>"we need to bump that dependency"</strong>, this is what they mean.</p>
+  </div>
+  <aside class="note"><b>the 400 strangers line always gets a reaction, use it.</b> it's also the honest answer to "why is this folder 300 megabytes". this slide is vocabulary only, the install has its own slide shortly.</aside>
+</section>
+
+<section class="slide" data-title="command · node -v" data-stage="build" data-seg="your machine" data-budget="15" data-frags="1">
+  <div class="eyebrow">type both · <b>same on mac and windows</b></div>
+  <h3 style="margin-bottom:18px">check node and npm are installed</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>node -v</code><button class="copy" data-copy="node -v">copy</button></div>
+  <div class="cmd"><span class="os">mac · win</span><code>npm -v</code><button class="copy" data-copy="npm -v">copy</button></div>
+  <div class="expect frag" data-frag="1">you should see two version numbers, something like:
+<em>v22.14.0</em>
+<em>10.9.2</em>
+
+if you see <s>command not found</s>, raise your hand.</div>
+  <aside class="note"><b>the exact numbers don't matter, only that a number appears.</b> anyone getting "command not found" needs node from nodejs.org, which takes four minutes on good wifi and twenty on ours. this is precisely why the prereq email exists.</aside>
+</section>
+
+<section class="slide" data-title="explain · git vs github" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="git|the tool on your laptop that tracks every change you make;;github|the website where everyone's copies are stored and combined">
+  <div class="eyebrow">the two most confused words in software</div>
+  <div class="stack">
+    <h2>git is on your laptop. github is a website. they are not the same thing.</h2>
+    <span class="term">git · github</span>
+    <p><strong>git</strong> is a program on your machine that remembers every version of every file. <strong>github</strong> is a website where those histories get uploaded, shared and combined. you can use git with no internet at all. github is where the team meets.</p>
+  </div>
+  <aside class="note"><b>this confusion causes more PO/dev miscommunication than anything else on the list.</b> useful line: git is the camera, github is the shared photo album. if you only teach one distinction today, teach this one.</aside>
+</section>
+
+<section class="slide" data-title="command · git and claude" data-stage="build" data-seg="your machine" data-budget="15" data-frags="1">
+  <div class="eyebrow">last two checks</div>
+  <h3 style="margin-bottom:18px">check git and claude are installed</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git --version</code><button class="copy" data-copy="git --version">copy</button></div>
+  <div class="cmd"><span class="os">mac · win</span><code>claude --version</code><button class="copy" data-copy="claude --version">copy</button></div>
+  <div class="expect frag" data-frag="1">two more version numbers:
+<em>git version 2.44.0</em>
+<em>2.1.211 (Claude Code)</em></div>
+  <aside class="note"><b>claude code needs a paid seat, the free plan does not include it.</b> if anyone's <code>claude</code> won't log in, pair them with a neighbour for act 3. do not spend workshop minutes debugging one account, it will eat fifteen.</aside>
+</section>
+
+<section class="slide checkpoint" data-title="checkpoint · four tools" data-stage="build" data-seg="your machine" data-budget="15">
+  <div class="ring">✓</div>
+  <h2>four version numbers on your screen?</h2>
+  <p style="margin-top:20px">node, npm, git, claude. if all four printed a number, you're ready. if any one didn't, raise a hand now, not in ten minutes.</p>
+  <aside class="note"><b>hard gate.</b> count hands out loud so people know you're genuinely waiting. co-facilitator floats. anyone still broken after three minutes pairs up rather than holding the room.</aside>
+</section>
+
+<section class="slide" data-title="explain · repo" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="repo|the project folder, with a full history of every change anyone has ever made to it">
+  <div class="eyebrow">the thing we're about to download</div>
+  <div class="stack">
+    <h2>a project folder that remembers every change anyone has ever made to it</h2>
+    <span class="term">repo · repository</span>
+    <p>it looks like an ordinary folder. the difference is the complete history attached to it: who changed what, when, and why. <strong>you never lose an old version</strong>, which is the most useful property of the whole system, and the reason today's session ends the way it does.</p>
+  </div>
+  <aside class="note"><b>plant the seed here for the undo kit.</b> "you never lose an old version" is the line you cash in during act 5 when everyone deletes their work on purpose. say it now so it pays off later.</aside>
+</section>
+
+<section class="slide" data-title="command · clone" data-stage="build" data-seg="your machine" data-budget="15" data-frags="1">
+  <div class="eyebrow">download the project · <b>swap in your real repo url</b></div>
+  <h3 style="margin-bottom:18px">get your own copy onto your laptop</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git clone https://github.com/carbonteq/team-wall.git</code><button class="copy" data-copy="git clone https://github.com/carbonteq/team-wall.git">copy</button></div>
+  <div class="cmd"><span class="os">mac · win</span><code>cd team-wall</code><button class="copy" data-copy="cd team-wall">copy</button></div>
+  <div class="expect frag" data-frag="1"><em>Cloning into 'team-wall'...</em>
+<em>Resolving deltas: 100% done.</em>
+
+<s>the second command is the one people forget.</s> clone puts you next to the folder, cd walks you into it.</div>
+  <aside class="note"><b>swap the url before the session.</b> the <code>cd</code> step is the most common silent failure of the whole workshop, everything after it fails confusingly if they're in the wrong folder. make them read their terminal prompt out loud and confirm it says team-wall.</aside>
+</section>
+
+<section class="slide" data-title="explain · dependencies" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="dependencies|code written by other people that our project needs in order to run;;node_modules|the folder where all those downloads land. huge, and never edited by hand">
+  <div class="eyebrow">why the next command takes a minute</div>
+  <div class="stack">
+    <h2>the project lists what it needs. npm goes and gets all of it.</h2>
+    <span class="term">package.json → node_modules</span>
+    <p>a file called <code>package.json</code> lists every piece of borrowed code. <code>npm install</code> reads that list and downloads all of it into a folder called <code>node_modules</code>. that folder is enormous, and <strong>nobody ever edits it or uploads it</strong>. it gets rebuilt from the list on every machine.</p>
+  </div>
+  <aside class="note"><b>open the real package.json on screen while you say this.</b> point at two lines in dependencies, that's enough. the takeaway is only that the file is a shopping list and the folder is the shopping.</aside>
+</section>
+
+<section class="slide" data-title="command · npm install" data-stage="build" data-seg="your machine" data-budget="15" data-frags="1">
+  <div class="eyebrow">this one takes about a minute · <b>watch it scroll</b></div>
+  <h3 style="margin-bottom:18px">download everything the project needs</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>npm install</code><button class="copy" data-copy="npm install">copy</button></div>
+  <div class="expect frag" data-frag="1"><em>added 412 packages in 48s</em>
+
+warnings in yellow are normal and can be ignored.
+errors in red are not. raise a hand for red.</div>
+  <aside class="note"><b>talk over the install rather than waiting in silence.</b> perfect window to repeat the 400-strangers thing and explain why yellow warnings are background noise in every javascript project on earth. fifteen people installing at once on office wifi can take three minutes, budget for it.</aside>
+</section>
+
+<section class="slide" data-title="explain · localhost" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="localhost|the website running on your own laptop, that only you can see">
+  <div class="eyebrow">a word you've definitely heard in standups</div>
+  <div class="stack">
+    <h2>the website, running on your laptop, visible only to you</h2>
+    <span class="term">localhost</span>
+    <p>it's a real, working version of the site. it just isn't on the internet. nobody else can open it, not even on the same wifi. this is why a dev can say <strong>"it works on my machine"</strong> and be telling the truth while the site is broken for everyone else.</p>
+  </div>
+  <aside class="note"><b>"works on my machine" is a phrase they've all heard and none have had explained.</b> explaining it here earns real goodwill. the number after the colon is just a door number, don't get dragged into explaining ports.</aside>
+</section>
+
+<section class="slide" data-title="command · npm run dev" data-stage="build" data-seg="your machine" data-budget="15" data-frags="1">
+  <div class="eyebrow">the moment the site comes alive</div>
+  <h3 style="margin-bottom:18px">start the website on your own laptop</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>npm run dev</code><button class="copy" data-copy="npm run dev">copy</button></div>
+  <div class="expect frag" data-frag="1"><em>ready on http://localhost:3000</em>
+
+now open that address in your browser.
+leave this terminal running. it has to stay open.</div>
+  <aside class="note"><b>"leave it running" needs saying twice.</b> people instinctively close the terminal or hit ctrl+c and then wonder why the site died. tell them to open a second terminal tab later if they need one.</aside>
+</section>
+
+<section class="slide checkpoint" data-title="checkpoint · localhost" data-stage="build" data-seg="your machine" data-budget="15">
+  <div class="ring">✓</div>
+  <h2>is the team wall open at <span style="font-family:var(--mono);color:var(--build)">localhost:3000</span>?</h2>
+  <p style="margin-top:20px">you should see a page with a few cards on it. this is the biggest gate of the day. we do not move until every single screen has it.</p>
+  <aside class="note"><b>the hardest gate in the session. genuinely wait.</b> failures are almost always one of three: wrong folder, install still running, or port 3000 taken by something else. if it's the third, <code>npm run dev -- -p 3001</code> and move on.</aside>
+</section>
+
+<section class="slide" data-title="explain · api" data-stage="build" data-seg="your machine" data-budget="15"
+  data-terms="api|an address that gives back raw data instead of a web page;;GET|a request that asks for something, as opposed to sending something">
+  <div class="eyebrow">hania asked for this one</div>
+  <div class="stack">
+    <h2>an address that hands back raw data instead of a pretty page</h2>
+    <span class="term">api · endpoint</span>
+    <p>the page you're looking at doesn't contain the names. it asks a second address for them, and that address replies with plain data. <strong>open <code>localhost:3000/api/team</code> in a new tab.</strong> that's an api. asking for something is a <code>GET</code>. sending something new is a <code>POST</code>.</p>
+  </div>
+  <aside class="note"><b>have the whole room open the api tab, twenty seconds and the word is permanently demystified.</b> then open devtools network tab on the main page and show the same request happening on its own. status codes and POST belong to workshop two, don't get pulled in.</aside>
+</section>
+
+<section class="slide" data-title="recap · act 1" data-stage="build" data-seg="your machine" data-budget="15">
+  <div class="eyebrow">what just happened</div>
+  <h2>you have a working copy of a real project</h2>
+  <ul class="recap">
+    <li>checked your laptop has the four tools <i>node · npm · git · claude</i></li>
+    <li>downloaded the project and walked into its folder <i>git clone · cd</i></li>
+    <li>fetched the 400 bits of borrowed code it needs <i>npm install</i></li>
+    <li>started the site on your own machine <i>npm run dev · localhost:3000</i></li>
+    <li>saw where the page gets its data from <i>/api/team</i></li>
+  </ul>
+  <aside class="note"><b>recap in their words, with the jargon only as the small grey footnote.</b> ask one person to describe what they just did without using any of the mono words. that's the real test of whether act 1 landed.</aside>
+</section>
+
+<!-- ACT 2 -->
+
+<section class="slide act" data-title="act · git in four words" data-stage="build" data-seg="git in four words" data-budget="15">
+  <div class="actnum">stop 3 of 6 · 15 minutes</div>
+  <h1>git is only four ideas. everything else is detail.</h1>
+  <div class="actdo"><span>repo</span><span>commit</span><span>branch</span><span>pull request</span></div>
+  <p style="margin-top:24px">you already have the first one. we'll do the other three now, and you'll use all four before we leave.</p>
+  <aside class="note"><b>saying "only four" out loud lowers the temperature in the room immediately.</b> git's reputation for being hard comes from the other 200 commands, none of which they need. commit to the four and refuse to be dragged past them.</aside>
+</section>
+
+<section class="slide" data-title="explain · commit" data-stage="build" data-seg="git in four words" data-budget="15"
+  data-terms="commit|a saved checkpoint of your work, with a note explaining what changed">
+  <div class="eyebrow">plain english first</div>
+  <div class="stack">
+    <h2>a save point, with a note attached saying what you changed and why</h2>
+    <span class="term">commit</span>
+    <p>ctrl+s saves a file. a commit saves <strong>the whole project as it stands right now</strong>, plus a sentence from you. you can return to any commit ever made, by anyone, forever. that's the safety net, and later today you're going to test it on purpose.</p>
+  </div>
+  <aside class="note"><b>the "note attached" part is what POs actually care about</b>, because commit messages are the audit trail they read when something goes wrong. good commit messages are a PO-visible quality signal, mention that.</aside>
+</section>
+
+<section class="slide" data-title="explain · branch" data-stage="build" data-seg="git in four words" data-budget="15"
+  data-terms="branch|your own copy of the project, where nothing you do affects anyone else;;main|the one real copy that everyone shares, and that users actually get">
+  <div class="eyebrow">the word you'll hear most often</div>
+  <div class="stack">
+    <h2>your own copy of the project, where nothing you do can affect anyone else</h2>
+    <span class="term">branch</span>
+    <p>like duplicating a google doc, scribbling all over your copy, and only pasting it back once someone's checked it. the shared original is called <code>main</code>. when a dev says <strong>"it's on my branch"</strong>, they mean it exists but it isn't real yet.</p>
+  </div>
+  <aside class="note"><b>the google doc analogy is the single most useful sentence in this deck for a non-technical room.</b> say the plain line, pause, then point at the mono word. never the other way round.</aside>
+</section>
+
+<section class="slide" data-title="the branch picture" data-stage="build" data-seg="git in four words" data-budget="15">
+  <div class="eyebrow">what that actually looks like</div>
+  <h2>you leave, you work, you come back</h2>
+  <div class="graph">
+    <svg viewBox="0 0 900 250" role="img" aria-label="A line diagram showing a branch splitting away from the shared main line, gathering two commits, and merging back in.">
+      <path class="gline" d="M60 185 H840" stroke="#8A83A8"/>
+      <path class="gline d2" d="M240 185 C310 185 320 90 400 90 H600 C680 90 690 185 760 185" stroke="#7EE0BE"/>
+      <circle class="gdot" cx="60" cy="185" r="9" fill="#8A83A8" style="animation-delay:.2s"/>
+      <circle class="gdot" cx="240" cy="185" r="9" fill="#8A83A8" style="animation-delay:.45s"/>
+      <circle class="gdot" cx="440" cy="90" r="9" fill="#7EE0BE" style="animation-delay:1.2s"/>
+      <circle class="gdot" cx="560" cy="90" r="9" fill="#7EE0BE" style="animation-delay:1.4s"/>
+      <circle class="gdot" cx="760" cy="185" r="12" fill="#B9A5FF" style="animation-delay:1.9s"/>
+      <circle class="gdot" cx="840" cy="185" r="9" fill="#8A83A8" style="animation-delay:2.1s"/>
+      <text class="glabel" x="60" y="222" text-anchor="middle">main</text>
+      <text class="glabel" x="240" y="222" text-anchor="middle">you branch off</text>
+      <text class="glabel" x="500" y="62" text-anchor="middle">your commits, invisible to everyone else</text>
+      <text class="glabel" x="770" y="222" text-anchor="middle">merged back in</text>
+    </svg>
+  </div>
+  <aside class="note"><b>let the animation finish before you talk over it.</b> then trace it with your finger: grey line is the shared project, green detour is you, purple dot is the moment your work becomes everyone's. that purple dot is the merge, which is act 6.</aside>
+</section>
+
+<section class="slide" data-title="command · checkout -b" data-stage="build" data-seg="git in four words" data-budget="15" data-frags="1">
+  <div class="eyebrow">type this one · <b>use your own name</b></div>
+  <h3 style="margin-bottom:18px">make your own copy to work in</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git checkout -b add/yourname</code><button class="copy" data-copy="git checkout -b add/yourname">copy</button></div>
+  <div class="expect frag" data-frag="1"><em>Switched to a new branch 'add/yourname'</em>
+
+replace yourname with your actual name.
+no spaces, no capitals.</div>
+  <aside class="note"><b>write your own example on the whiteboard so they see the shape.</b> the two failures here are spaces in the name, and being in the wrong folder. "fatal: not a git repository" always means wrong folder.</aside>
+</section>
+
+<section class="slide checkpoint" data-title="checkpoint · branch" data-stage="build" data-seg="git in four words" data-budget="15">
+  <div class="ring">✓</div>
+  <h2>does it say <span style="font-family:var(--mono);color:var(--build)">Switched to a new branch</span>?</h2>
+  <p style="margin-top:20px">from here on, everything you do happens in your own private copy. you literally cannot affect anyone else in this room.</p>
+  <aside class="note"><b>hard gate, and a good moment to restate rule three.</b> the psychological shift matters more than the technical one: once they believe they're in a sandbox, they start experimenting instead of freezing.</aside>
+</section>
+
+<section class="slide" data-title="recap · act 2" data-stage="build" data-seg="git in four words" data-budget="15">
+  <div class="eyebrow">what just happened</div>
+  <h2>you're standing in your own copy of a real project</h2>
+  <ul class="recap">
+    <li>a save point with a note is a <i>commit</i></li>
+    <li>your private copy is a <i>branch</i>, the shared one is <i>main</i></li>
+    <li>you made your own and you're standing in it <i>git checkout -b</i></li>
+    <li>the fourth word, <i>pull request</i>, is waiting after the break</li>
+  </ul>
+  <aside class="note"><b>send them to break on a cliffhanger.</b> "when you come back you're going to write actual code, and then delete it on purpose." that sentence gets people back on time.</aside>
+</section>
+
+<section class="slide brk" data-title="break" data-stage="build" data-seg="break" data-budget="10">
+  <h1>10 minutes<span class="cursor"></span></h1>
+  <p style="margin-top:22px">leave your terminal running. leave <code>localhost:3000</code> open. don't close anything.</p>
+  <aside class="note"><b>say "don't close anything" twice, because half of them will close everything.</b> use the break to check on anyone who struggled in act 1 rather than taking the break yourself.</aside>
+</section>
+
+<!-- ACT 3 -->
+
+<section class="slide act" data-title="act · the leash" data-stage="build" data-seg="the leash" data-budget="18">
+  <div class="actnum">stop 4 of 6 · 18 minutes</div>
+  <h1>now you write code. you won't be writing it alone.</h1>
+  <div class="actdo"><span>claude in the repo</span><span>reading a diff</span><span>the leash file</span></div>
+  <p style="margin-top:24px">most of you already use claude for this. the goal isn't to teach you to prompt, it's to stop it doing damage you then have to undo.</p>
+  <aside class="note"><b>acknowledge that they're already doing this.</b> this room isn't new to AI coding tools, it's new to the guardrails. "you're already driving, here are the brakes" respects them and lands far better than a beginner's tutorial.</aside>
+</section>
+
+<section class="slide" data-title="command · claude" data-stage="build" data-seg="the leash" data-budget="18" data-frags="1">
+  <div class="eyebrow">from inside the project folder</div>
+  <h3 style="margin-bottom:18px">start claude, inside the repo</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>claude</code><button class="copy" data-copy="claude">copy</button></div>
+  <div class="expect frag" data-frag="1">it opens a chat, right there in your terminal.
+
+the difference from the website: <em>it can read and change the actual files</em> in this folder. that's the whole point, and it's also the whole risk.</div>
+  <aside class="note"><b>the read-and-change-real-files distinction is the thing to hammer here.</b> the web version talks about code, this version touches code. everything on the next four slides follows from that one sentence.</aside>
+</section>
+
+<section class="slide" data-title="the prompt" data-stage="build" data-seg="the leash" data-budget="18">
+  <div class="eyebrow">paste this · <b>fill in your own bits</b></div>
+  <h3>ask it to add you to the wall</h3>
+  <div class="prompt">add a new card to the team array in <v>src/data/team.ts</v> for me.<br>name: <v>your name</v><br>role: <v>your job title</v><br>fun fact: <v>anything</v><br>emoji: <v>pick one</v><br><br>show me the diff before you change anything.</div>
+  <aside class="note"><b>give them the prompt rather than a blank cursor.</b> a blank prompt in front of a nervous room kills five minutes. the last line is the important one, and it's the habit you want them to keep: always ask to see the change first.</aside>
+</section>
+
+<section class="slide" data-title="explain · diff" data-stage="build" data-seg="the leash" data-budget="18"
+  data-terms="diff|a side by side view of exactly what changed. green is added, red is removed">
+  <div class="eyebrow">the most useful screen in software</div>
+  <div class="stack">
+    <h2>green is what got added. red is what got taken away. that's all a diff is.</h2>
+    <span class="term">diff</span>
+    <p>this is what a reviewer looks at, and what you should look at every single time claude offers to change something. <strong>you don't need to understand the code to notice it's editing four files when you asked about one.</strong> that instinct alone will save you hours.</p>
+  </div>
+  <aside class="note"><b>this is the highest-value transferable skill in the workshop.</b> POs can read a diff for scope even when they can't read the code. "did it touch more than i asked?" is a question they're already qualified to answer.</aside>
+</section>
+
+<section class="slide checkpoint" data-title="checkpoint · your card" data-stage="build" data-seg="the leash" data-budget="18">
+  <div class="ring">✓</div>
+  <h2>is your card on your <span style="font-family:var(--mono);color:var(--build)">localhost:3000</span>?</h2>
+  <p style="margin-top:20px">refresh the tab. you should see yourself on the wall. nobody else can see it yet, it only exists on your laptop.</p>
+  <aside class="note"><b>the first genuinely satisfying moment of the session, let them enjoy it.</b> then immediately point out that nobody else can see it, which sets up why the rest of the workshop exists.</aside>
+</section>
+
+<section class="slide" data-title="pain · undo" data-stage="build" data-seg="the leash" data-budget="18" data-frags="1">
+  <div class="eyebrow">a real thing that happens · <b>and the fix</b></div>
+  <div class="split">
+    <div class="pane pain">
+      <span class="tag">what goes wrong</span>
+      <h3>you ask claude to run a git command, it does something else, and now you're undoing damage</h3>
+      <p>it commits when you only wanted to look. it stages files you never mentioned. it decides to be helpful and tidy up while it's in there.</p>
+    </div>
+    <div class="pane fix frag" data-frag="1">
+      <span class="tag">the fix</span>
+      <h3>make it ask first, in writing, in the project</h3>
+      <p>a file called <code>CLAUDE.md</code> sits in the repo and gets read at the start of every session. put "never commit or push without asking" in it once and it applies to everyone, forever, on every machine.</p>
+    </div>
+  </div>
+  <aside class="note"><b>this one is hania's, name her if she's happy to be named.</b> the reframe that matters: it isn't a claude problem or a you problem, it's a missing-instructions problem, and instructions are just a file you can write.</aside>
+</section>
+
+<section class="slide" data-title="pain · rebase" data-stage="build" data-seg="the leash" data-budget="18" data-frags="1">
+  <div class="eyebrow">a second real one · <b>and its fix</b></div>
+  <div class="split">
+    <div class="pane pain">
+      <span class="tag">what goes wrong</span>
+      <h3>it tidies your history and every save point gets a new id</h3>
+      <p>it runs <code>rebase</code>, which rewrites your existing checkpoints instead of adding to them. your old ids stop existing, github gets confused, and the fix looks scarier than the problem was.</p>
+    </div>
+    <div class="pane fix frag" data-frag="1">
+      <span class="tag">the fix</span>
+      <h3>you don't need to learn rebase. you need to not rebase.</h3>
+      <p>one setting, once, on your machine, plus one line in the project's <code>CLAUDE.md</code>. after that it stops being your problem.</p>
+    </div>
+  </div>
+  <aside class="note"><b>this one is hamza's, and it's a genuinely good catch, say so.</b> resist explaining what rebase actually does. this room doesn't need it and the explanation costs six minutes you don't have.</aside>
+</section>
+
+<section class="slide" data-title="command · no rebase" data-stage="build" data-seg="the leash" data-budget="18" data-frags="1">
+  <div class="eyebrow">run this once · <b>it stays set forever</b></div>
+  <h3 style="margin-bottom:18px">stop git rewriting your history behind you</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git config --global pull.rebase false</code><button class="copy" data-copy="git config --global pull.rebase false">copy</button></div>
+  <div class="expect frag" data-frag="1">no output at all. that's correct.
+
+silence means it worked. git only speaks up when something's wrong.</div>
+  <aside class="note"><b>"no output means it worked" is worth saying explicitly.</b> people stare at a blank line and assume failure. small thing, removes a lot of low-level anxiety about the terminal.</aside>
+</section>
+
+<section class="slide" data-title="the leash file" data-stage="build" data-seg="the leash" data-budget="18"
+  data-terms="CLAUDE.md|a plain text file in the project that claude reads at the start of every session. house rules.">
+  <div class="eyebrow">the thing you take home from today</div>
+  <h2>five lines that put a leash on it</h2>
+  <div class="file">
+    <div class="fh">CLAUDE.md · sitting in the root of the project</div>
+    <ul>
+      <li>never run rebase or push --force. <i>ever.</i></li>
+      <li>never commit or push unless i ask. <i>show me first.</i></li>
+      <li>show me the diff before changing any file. <i>every time.</i></li>
+      <li>change only the files i named. <i>no tidying while you're in there.</i></li>
+      <li>if you're unsure, stop and ask. <i>don't guess.</i></li>
+    </ul>
+  </div>
+  <p style="margin-top:16px">it's already in this repo. open it. <strong>copy it into any project you work in on monday.</strong></p>
+  <aside class="note"><b>the single highest-value artifact anyone takes away today, treat it as the climax of the act.</b> open the real file on screen and read it line by line. tell them to paste it into their own repos, and that a dev on their team will thank them for it.</aside>
+</section>
+
+<section class="slide" data-title="recap · act 3" data-stage="build" data-seg="the leash" data-budget="18">
+  <div class="eyebrow">what just happened</div>
+  <h2>you changed a real project, with guardrails on</h2>
+  <ul class="recap">
+    <li>ran claude inside the repo, where it can touch real files <i>claude</i></li>
+    <li>read what it changed before accepting it <i>diff</i></li>
+    <li>turned off the setting that rewrites history <i>pull.rebase false</i></li>
+    <li>got five lines that stop it doing damage in any project <i>CLAUDE.md</i></li>
+  </ul>
+  <aside class="note"><b>lead into act 4 with the promise you planted in act 1:</b> "i said you never lose an old version. next fifteen minutes we prove it, and you're all going to delete your work to find out."</aside>
+</section>
+
+<!-- ACT 4 -->
+
+<section class="slide act" data-title="act · the undo kit" data-stage="build" data-seg="the undo kit" data-budget="15">
+  <div class="actnum">stop 5 of 6 · 15 minutes</div>
+  <h1>we're going to delete your work on purpose</h1>
+  <div class="actdo"><span>commit</span><span>the disaster</span><span>the rescue</span></div>
+  <p style="margin-top:24px">and then get it back. this is the part you'll actually remember in six months.</p>
+  <aside class="note"><b>announce this clearly and let the discomfort sit for a second.</b> the act only works because the loss feels real. do not reassure them in advance, that's exactly what ruins it.</aside>
+</section>
+
+<section class="slide" data-title="command · commit" data-stage="build" data-seg="the undo kit" data-budget="15" data-frags="1">
+  <div class="eyebrow">save your checkpoint first</div>
+  <h3 style="margin-bottom:18px">save your work, with a note</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git add .</code><button class="copy" data-copy="git add .">copy</button></div>
+  <div class="cmd"><span class="os">mac · win</span><code>git commit -m "add me to the team wall"</code><button class="copy" data-copy='git commit -m "add me to the team wall"'>copy</button></div>
+  <div class="expect frag" data-frag="1"><em>1 file changed, 6 insertions(+)</em>
+
+<code>add</code> picks what goes in the box.
+<code>commit</code> closes the box and labels it.</div>
+  <aside class="note"><b>the box analogy handles the add/commit two-step, which confuses everyone the first time.</b> don't get pulled into explaining the staging area properly. "add picks, commit saves" is enough for today.</aside>
+</section>
+
+<section class="slide" data-title="explain · the hash" data-stage="build" data-seg="the undo kit" data-budget="15"
+  data-terms="hash|the unique id of a save point. seven characters, and it's how you find your way back">
+  <div class="eyebrow">run this, then look at the left column</div>
+  <div class="stack">
+    <h2>every save point gets a unique id. that id is how you find your way back.</h2>
+    <span class="term">hash</span>
+  </div>
+  <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>git log --oneline</code><button class="copy" data-copy="git log --oneline">copy</button></div>
+  <p style="margin-top:14px">those seven characters on the left of each line are hashes. <strong>this is why "rebase changed my hashes" is a real problem</strong>, it renames every checkpoint you were relying on.</p>
+  <aside class="note"><b>this quietly answers hamza's question properly, now that they have the vocabulary for it.</b> have them copy their newest hash into a notes app right now, because they're about to need it.</aside>
+</section>
+
+<section class="slide" data-title="the disaster" data-stage="build" data-seg="the undo kit" data-budget="15" data-frags="1">
+  <div class="eyebrow">everyone, together, on three</div>
+  <h3 style="margin-bottom:18px">now destroy it</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git reset --hard HEAD~1</code><button class="copy" data-copy="git reset --hard HEAD~1">copy</button></div>
+  <div class="expect frag" data-frag="1">check <code>git log --oneline</code> again.
+check your file.
+
+<s>your commit is gone. your card is gone.</s></div>
+  <aside class="note"><b>count them in, have the whole room run it at the same time, then say nothing for five full seconds.</b> that silence is the most valuable pause in the workshop. let someone say "wait, what" before you move on.</aside>
+</section>
+
+<section class="slide" data-title="the rescue" data-stage="build" data-seg="the undo kit" data-budget="15" data-frags="2"
+  data-terms="reflog|git's private record of everywhere you have been. it survives deletes and resets for about 30 days">
+  <div class="eyebrow">now watch</div>
+  <div class="reflog">
+    <div class="commit"><div class="hash">a4f9c2e</div><div class="msg">add me to the team wall</div></div>
+    <div class="verdict frag" data-frag="1">gone.</div>
+  </div>
+  <div class="expect frag" data-frag="2">git reflog
+<em>a4f9c2e HEAD@{1}: commit: add me to the team wall</em>
+
+git reset --hard a4f9c2e
+<em>HEAD is now at a4f9c2e</em></div>
+  <aside class="note"><b>the takeaway sentence, say it exactly:</b> "for about thirty days, git remembers everywhere you have been. you can almost always get back." after this act they experiment instead of freezing, which is the entire behavioural goal of the session.</aside>
+</section>
+
+<section class="slide" data-title="the undo cheat sheet" data-stage="build" data-seg="the undo kit" data-budget="15">
+  <div class="eyebrow">screenshot this one</div>
+  <h2>four situations, four answers</h2>
+  <div class="cheat">
+    <div class="r"><div class="q">i messed up a file and haven't saved a checkpoint</div><div class="a">git restore &lt;file&gt;</div></div>
+    <div class="r"><div class="q">i need to park this and come back later</div><div class="a">git stash</div></div>
+    <div class="r"><div class="q">my last checkpoint was wrong</div><div class="a">git reset --soft HEAD~1</div></div>
+    <div class="r"><div class="q">i have genuinely lost something</div><div class="a">git reflog</div></div>
+  </div>
+  <p style="margin-top:18px">and the rule underneath all four: <strong>if you're not sure, don't type anything, ask a dev.</strong> nothing gets worse while you wait.</p>
+  <aside class="note"><b>tell them to photograph this slide.</b> the last line matters more than the four commands: the expensive mistakes happen when a panicking person keeps typing. waiting is always safe.</aside>
+</section>
+
+<section class="slide" data-title="recap · act 4" data-stage="build" data-seg="the undo kit" data-budget="15">
+  <div class="eyebrow">what just happened</div>
+  <h2>you deleted your work and got it back</h2>
+  <ul class="recap">
+    <li>saved a checkpoint with a note <i>git add · git commit</i></li>
+    <li>saw that every checkpoint has an id <i>git log --oneline</i></li>
+    <li>destroyed it <i>git reset --hard</i></li>
+    <li>found it again <i>git reflog</i></li>
+    <li>nothing was ever actually gone <i>~30 days</i></li>
+  </ul>
+  <aside class="note"><b>the last line is the thesis of the whole workshop, deliver it as one.</b> this is the sentence you want them repeating to a colleague on monday.</aside>
+</section>
+
+<!-- ACT 5 -->
+
+<section class="slide act" data-title="act · shipping it" data-stage="check" data-seg="shipping it" data-budget="27">
+  <div class="actnum">stop 6 of 6 · 27 minutes</div>
+  <h1>time to get it off your laptop and in front of people</h1>
+  <div class="actdo"><span>push</span><span>pull request</span><span>review</span><span>conflict</span><span>merge</span><span>live</span></div>
+  <p style="margin-top:24px">everything so far happened on your machine only. the rest of the session is the other two stages: check, then ship.</p>
+  <aside class="note"><b>point at the strip along the bottom, it's about to move for the first time in an hour.</b> this act runs long more often than not. if you're behind, cut the conflict to a single facilitator-driven example instead of pairing people up.</aside>
+</section>
+
+<section class="slide" data-title="command · push" data-stage="check" data-seg="shipping it" data-budget="27" data-frags="1">
+  <div class="eyebrow">send your copy up to github</div>
+  <h3 style="margin-bottom:18px">put your branch somewhere other than your laptop</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git push -u origin add/yourname</code><button class="copy" data-copy="git push -u origin add/yourname">copy</button></div>
+  <div class="expect frag" data-frag="1"><em>branch 'add/yourname' set up to track 'origin/add/yourname'</em>
+
+github will print a link. don't click it yet.</div>
+  <aside class="note"><b>this is where login problems surface if the prereq wasn't done.</b> anyone hitting an auth wall needs <code>gh auth login</code>, which is exactly why it was on the prereq list. pair them with a neighbour rather than debugging live.</aside>
+</section>
+
+<section class="slide" data-title="explain · pull request" data-stage="check" data-seg="shipping it" data-budget="27"
+  data-terms="pull request|a formal request to have your copy checked and then folded into the shared one;;PR|short for pull request, and what everyone actually says out loud">
+  <div class="eyebrow">the fourth and last git word</div>
+  <div class="stack">
+    <h2>a formal way of saying: here's my copy, please check it, then fold it in</h2>
+    <span class="term">pull request · PR</span>
+    <p>it's a page on github with your changes on one side and a conversation on the other. <strong>nothing gets into <code>main</code> without one.</strong> when a dev says "it's in review" or "waiting on approval", this page is the thing they mean.</p>
+  </div>
+  <aside class="note"><b>the word POs hear most and understand least.</b> "in review" is a status they report upward constantly. after this slide they know it means a specific page with a specific button on it.</aside>
+</section>
+
+<section class="slide" data-title="the PR screen" data-stage="check" data-seg="shipping it" data-budget="27">
+  <div class="eyebrow">open the link github gave you</div>
+  <h2>three things to look at, and nothing else</h2>
+  <div class="stages">
+    <div class="stg" data-k="check"><b>files changed</b><span>the diff. what you actually altered. green added, red removed.</span></div>
+    <div class="stg" data-k="check"><b>checks</b><span>robots running automatically. green tick or red cross.</span></div>
+    <div class="stg" data-k="check"><b>conversation</b><span>where a human leaves comments and eventually approves.</span></div>
+  </div>
+  <p style="margin-top:20px">that's the entire screen. everything else on it is noise you can ignore for a year.</p>
+  <aside class="note"><b>walk the real PR on the projector.</b> deliberately telling them what to ignore is more useful than explaining every tab. POs get overwhelmed by github's UI, and permission to ignore 80% of it is a gift.</aside>
+</section>
+
+<section class="slide" data-title="explain · ci" data-stage="check" data-seg="shipping it" data-budget="27"
+  data-terms="CI|robots that automatically build and test your change the moment you open a PR;;the build is red|one of those automated steps failed. nothing is on fire.">
+  <div class="eyebrow">eman asked for this one</div>
+  <div class="stack">
+    <h2>the moment you open a PR, robots start checking it</h2>
+    <span class="term">CI · the pipeline</span>
+    <p>they try to build the project, run the tests, and check the formatting. <strong>"the build is red"</strong> just means one of those steps failed. it's a normal, daily, uneventful thing. it isn't an outage, and it happens before any user is anywhere near it.</p>
+  </div>
+  <aside class="note"><b>demystifying "the build is red" is worth a lot to this room.</b> they hear it in standups and assume crisis. name it as routine. your github action running <code>npm run build</code> is the live example, point at the check running on the PR.</aside>
+</section>
+
+<section class="slide checkpoint" data-title="checkpoint · PR" data-stage="check" data-seg="shipping it" data-budget="27">
+  <div class="ring">✓</div>
+  <h2>is your PR open, with a green tick?</h2>
+  <p style="margin-top:20px">your name should be on the list of open pull requests. if your check is red, that's interesting rather than bad. put your hand up and we'll read it together.</p>
+  <aside class="note"><b>if someone genuinely gets a red check, do not fix it quietly.</b> put it on the projector and read the log together. an unplanned real failure is the best teaching moment you'll get all day.</aside>
+</section>
+
+<section class="slide" data-title="the conflict" data-stage="check" data-seg="shipping it" data-budget="27" data-frags="1"
+  data-terms="merge conflict|two people changed the same line, so git stops and asks a human which one is right">
+  <div class="eyebrow">this will happen to two of you · <b>on purpose</b></div>
+  <h2>when two people edit the same line, git refuses to guess</h2>
+  <div class="conflict">
+    <div class="c a"><b>HANIA'S BRANCH</b>{ name: "hania", emoji: "🌙" },</div>
+    <div class="c b"><b>HAMZA'S BRANCH</b>{ name: "hamza", emoji: "⚡" },</div>
+  </div>
+  <div class="expect frag" data-frag="1"><s>CONFLICT (content): Merge conflict in src/data/team.ts</s>
+
+git is not broken and neither are you.
+it's asking a question: <em>which of these two lines should survive?</em></div>
+  <aside class="note"><b>engineer this deliberately: have two people add cards on adjacent lines, then merge the second one after the first.</b> resolve it live on the projector. five minutes here permanently defuses a phrase they've heard in panic-toned standups for years.</aside>
+</section>
+
+<section class="slide" data-title="explain · merge and deploy" data-stage="ship" data-seg="shipping it" data-budget="27"
+  data-terms="merge|folding your copy back into the shared one. now it's real.;;deploy|copying the finished code onto the servers users actually reach">
+  <div class="eyebrow">the last two words of the day</div>
+  <div class="stack">
+    <h2>merge makes it real. deploy makes it visible.</h2>
+    <span class="term">merge → deploy</span>
+    <p>merging folds your branch back into <code>main</code>. that alone doesn't put it in front of anyone. <strong>deploying is the separate step that copies it onto the servers users actually reach</strong>, and on this project it happens automatically, about forty seconds after the merge.</p>
+  </div>
+  <aside class="note"><b>merge and deploy being two different things is the distinction POs most often collapse.</b> "it's merged" and "it's live" are different sentences, and the gap between them is where a lot of PO/dev confusion lives.</aside>
+</section>
+
+<section class="slide" data-title="the wall" data-stage="ship" data-seg="shipping it" data-budget="27">
+  <div class="eyebrow">refresh the live site</div>
+  <h2>that's all of you, on the internet</h2>
+  <div class="wall">
+    <div class="wcard" style="animation-delay:.1s"><div class="em">🌙</div><div class="nm">hania</div><div class="rl">product owner</div></div>
+    <div class="wcard" style="animation-delay:.2s"><div class="em">⚡</div><div class="nm">hamza</div><div class="rl">product owner</div></div>
+    <div class="wcard" style="animation-delay:.3s"><div class="em">🌊</div><div class="nm">eman</div><div class="rl">product owner</div></div>
+    <div class="wcard" style="animation-delay:.4s"><div class="em">🔭</div><div class="nm">you</div><div class="rl">product owner</div></div>
+    <div class="wcard" style="animation-delay:.5s"><div class="em">🪴</div><div class="nm">and you</div><div class="rl">product owner</div></div>
+    <div class="wcard" style="animation-delay:.6s"><div class="em">☕</div><div class="nm">and you</div><div class="rl">product owner</div></div>
+  </div>
+  <p style="margin-top:18px">an hour ago none of this existed. you wrote it, reviewed it, and shipped it.</p>
+  <aside class="note"><b>replace these placeholders with the real cards before you present, or just switch to the live site on the projector instead.</b> this is the screenshot moment, tell them to take it and put it in the channel.</aside>
+</section>
+
+<!-- CLOSE -->
+
+<section class="slide" data-title="the day, all of it" data-stage="ship" data-seg="close" data-budget="5">
+  <div class="eyebrow">back where we started · <b>two hours later</b></div>
+  <h2>you did all of it</h2>
+  <div class="day">
+    <div class="row" data-stage="plan"><div class="t">9:30</div><div class="dot"></div><div class="bodyc"><b>you already wrote the ticket</b><span>this was always yours</span></div></div>
+    <div class="row" data-stage="build"><div class="t">9:47</div><div class="dot"></div><div class="bodyc"><b>clone, branch, install, run</b><span>you did this</span></div></div>
+    <div class="row" data-stage="build"><div class="t">10–1</div><div class="dot"></div><div class="bodyc"><b>wrote code with claude, read the diff</b><span>you did this</span></div></div>
+    <div class="row" data-stage="build"><div class="t">1:30</div><div class="dot"></div><div class="bodyc"><b>broke it and got it back</b><span>you did this too</span></div></div>
+    <div class="row" data-stage="check"><div class="t">2:10</div><div class="dot"></div><div class="bodyc"><b>opened a PR, watched the checks, fixed a conflict</b><span>and this</span></div></div>
+    <div class="row" data-stage="ship"><div class="t">3:30</div><div class="dot"></div><div class="bodyc"><b>merged, deployed, live</b><span>and it's on the internet right now</span></div></div>
+  </div>
+  <aside class="note"><b>point at each row and name the person in the room who struggled with it and got through it.</b> specific beats general. this is the last thing they'll remember from the session.</aside>
+</section>
+
+<section class="slide" data-title="monday" data-stage="ship" data-seg="close" data-budget="5">
+  <div class="eyebrow">three things to actually take with you</div>
+  <h2>what to do on monday</h2>
+  <ul class="recap">
+    <li>copy <code>CLAUDE.md</code> into whatever project you work in <i>five lines, thirty seconds</i></li>
+    <li>run <code>git config --global pull.rebase false</code> on your own machine <i>if you haven't already</i></li>
+    <li>next time a dev says a word you don't know, ask which of the four stages it belongs to <i>plan · build · check · ship</i></li>
+  </ul>
+  <p style="margin-top:22px">the glossary from today lives in this deck. press <code>g</code> any time, including six months from now.</p>
+  <aside class="note"><b>keep the homework to three items and make all three take under a minute.</b> the glossary is the phrasebook artifact, make sure they know the deck url is theirs to keep and that <code>g</code> works forever.</aside>
+</section>
+
+<section class="slide" data-title="end" data-stage="ship" data-seg="close" data-budget="5">
+  <div class="stack">
+    <div class="eyebrow">that's it · <b>questions, then food</b></div>
+    <h1 style="max-width:18ch">nothing you break is permanent<span class="cursor"></span></h1>
+    <p>that was the whole point. the terminal isn't dangerous, git remembers everything, and claude does what you tell it to once you write the rules down. workshop two is the check and ship stages properly: testing, pipelines, environments, and what happens when something breaks in production.</p>
+  </div>
+  <aside class="note"><b>close on the thesis, not on a thank-you slide.</b> then take questions with the glossary open on screen, it gives quieter people something to point at instead of having to phrase a question from scratch.</aside>
+</section>
+
+</main>
+
+<div id="gcard"><div class="k"></div><div class="v"></div></div>
+<div id="notes"></div>
+
+<div id="strip">
+  <div class="st" data-k="plan">plan</div>
+  <div class="st" data-k="build">build</div>
+  <div class="st" data-k="check">check</div>
+  <div class="st" data-k="ship">ship</div>
+  <div class="num"><span id="n">1</span> / <span id="tot">1</span></div>
+</div>
+
+<div class="sheet" id="overview"><h4>all slides · click to jump · esc to close</h4><div class="ovgrid" id="ovgrid"></div></div>
+<div class="sheet" id="glossary"><h4>glossary · every word we've used so far · esc to close</h4><div class="glgrid" id="glgrid"></div></div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let i = 0, frag = 0, started = false, segStart = Date.now(), curSeg = null;
+
+  const bar = document.getElementById('bar');
+  const nEl = document.getElementById('n');
+  const gcard = document.getElementById('gcard');
+  const notes = document.getElementById('notes');
+  const clock = document.getElementById('clock');
+  const ORDER = ['plan','build','check','ship'];
+
+  const TERMS = [];
+  slides.forEach((s, idx) => {
+    (s.dataset.terms || '').split(';;').filter(Boolean).forEach(pair => {
+      const bits = pair.split('|');
+      if (bits.length === 2) TERMS.push({ k: bits[0].trim(), v: bits[1].trim(), at: idx });
+    });
+  });
+
+  document.getElementById('tot').textContent = total;
+  const frags = s => parseInt(s.dataset.frags || '0', 10);
+
+  function paint(){
+    const s = slides[i];
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    s.dataset.frag = frag;
+    s.querySelectorAll('.frag').forEach(f => f.classList.toggle('on', parseInt(f.dataset.frag, 10) <= frag));
+
+    const si = ORDER.indexOf(s.dataset.stage);
+    document.querySelectorAll('#strip .st').forEach(el => {
+      el.dataset.on = ORDER.indexOf(el.dataset.k) <= si ? '1' : '0';
+    });
+
+    nEl.textContent = i + 1;
+    bar.style.width = ((i + 1) / total * 100) + '%';
+    const n = s.querySelector('.note');
+    notes.innerHTML = n ? n.innerHTML : '<i>no notes on this slide</i>';
+    location.hash = i + 1;
+
+    const seg = s.dataset.seg || '';
+    if (seg !== curSeg){
+      curSeg = seg;
+      clock.querySelector('.seg').textContent = seg;
+      clock.querySelector('.bud').textContent = (s.dataset.budget || '0') + ':00';
+      segStart = Date.now();
+    }
+
+    const t = TERMS.find(x => x.at === i && !x.shown);
+    if (t){
+      t.shown = true;
+      gcard.querySelector('.k').textContent = t.k;
+      gcard.querySelector('.v').textContent = t.v;
+      gcard.classList.add('on');
+      clearTimeout(gcard._t);
+      gcard._t = setTimeout(() => gcard.classList.remove('on'), 5400);
+    }
+  }
+
+  function go(n){
+    n = Math.max(0, Math.min(total - 1, n));
+    if (n === i) return;
+    i = n; frag = 0; paint();
+  }
+  function fwd(){ if (frag < frags(slides[i])) { frag++; paint(); } else go(i + 1); }
+  function back(){
+    if (frag > 0) { frag--; paint(); }
+    else if (i > 0){ i--; frag = frags(slides[i]); paint(); }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (document.body.classList.contains('ov-on') || document.body.classList.contains('gl-on')){
+      if (['Escape','o','O','g','G'].indexOf(e.key) > -1) document.body.classList.remove('ov-on','gl-on');
+      return;
+    }
+    switch(e.key){
+      case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); fwd(); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); back(); break;
+      case 'Home': go(0); break;
+      case 'End': go(total - 1); break;
+      case 'n': case 'N': document.body.classList.toggle('notes-on'); break;
+      case 'o': case 'O': buildOv(); document.body.classList.add('ov-on'); break;
+      case 'g': case 'G': buildGl(); document.body.classList.add('gl-on'); break;
+      case 'f': case 'F':
+        document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+        break;
+    }
+    started = true;
+  });
+
+  document.getElementById('deck').addEventListener('click', e => {
+    if (e.target.closest('button') || e.target.closest('a')) return;
+    started = true;
+    e.clientX < window.innerWidth * 0.18 ? back() : fwd();
+  });
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.copy');
+    if (!b) return;
+    navigator.clipboard.writeText(b.dataset.copy).then(function(){
+      b.textContent = 'copied'; b.classList.add('done');
+      setTimeout(function(){ b.textContent = 'copy'; b.classList.remove('done'); }, 1600);
+    });
+  });
+
+  function buildOv(){
+    const g = document.getElementById('ovgrid');
+    g.innerHTML = '';
+    slides.forEach((s, k) => {
+      const b = document.createElement('button');
+      b.className = 'ovcell';
+      const sp = document.createElement('span');
+      sp.className = 'n';
+      sp.textContent = String(k + 1).padStart(2,'0') + ' · ' + (s.dataset.seg || '');
+      b.appendChild(sp);
+      b.appendChild(document.createTextNode(s.dataset.title || ''));
+      b.onclick = () => { document.body.classList.remove('ov-on'); go(k); };
+      g.appendChild(b);
+    });
+  }
+  function buildGl(){
+    const g = document.getElementById('glgrid');
+    const out = TERMS.filter(x => x.at <= i);
+    g.innerHTML = '';
+    if (!out.length){ g.textContent = 'no words introduced yet.'; return; }
+    out.forEach(x => {
+      const d = document.createElement('div');
+      d.className = 'glcell';
+      const k = document.createElement('div'); k.className = 'k'; k.textContent = x.k;
+      const v = document.createElement('div'); v.className = 'v'; v.textContent = x.v;
+      d.appendChild(k); d.appendChild(v);
+      g.appendChild(d);
+    });
+  }
+
+  setInterval(() => {
+    if (!started) return;
+    const s = Math.floor((Date.now() - segStart) / 1000);
+    clock.querySelector('.el').textContent =
+      String(Math.floor(s / 60)).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
+    const bud = parseInt(slides[i].dataset.budget || '0', 10) * 60;
+    clock.classList.toggle('over', bud > 0 && s > bud);
+  }, 1000);
+
+  const h = parseInt(location.hash.slice(1), 10);
+  if (h >= 1 && h <= total) i = h - 1;
+  paint();
+})();
+</script>
+</body>
+</html>
