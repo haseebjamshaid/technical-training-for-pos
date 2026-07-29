@@ -396,23 +396,25 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
   <aside class="note"><b>laptops open from here to the end.</b> check the room for vs code before anything else: it is the only item on the list that takes a real download, and somebody will not have it. get that person installing in the background while you carry on with node and git. the spare minutes in this stop are your buffer for exactly that, and there is always one.</aside>
 </section>
 
-<section class="slide" data-title="the terminal" data-stage="build" data-seg="your machine" data-budget="19"
-  data-terms="terminal|a window where you type commands to your computer instead of clicking things">
-  <div class="eyebrow">plain english first · <b>then we open one</b></div>
-  <h2>a window where you type instructions instead of clicking them</h2>
-  <p style="margin-top:14px">that is the whole idea. clicking a folder open, and typing <code>cd folder</code>, do exactly the same thing. developers type because it is faster, and because <strong>a typed instruction can be saved and run again tomorrow</strong>. nothing you type today can damage your laptop.</p>
-  <div class="cmd" style="margin-top:20px"><span class="os">mac · win</span><code>view menu → terminal</code><button class="copy" data-copy="view > terminal">copy</button></div>
-  <div class="expect">a panel opens along the bottom of vs code, with a blinking cursor. <em>that panel is a terminal.</em>
-
-it is the same thing as the mac Terminal app or windows PowerShell, just living inside your editor, already sitting in your project folder.</div>
-  <aside class="note"><b>the fear here is real and worth thirty seconds.</b> say plainly: nothing today touches anything outside the one folder we are about to download. the black window is not a hacker movie, it is a filing cabinet with a keyboard. using vs code's own terminal kills a whole category of confusion, no alt-tabbing and no "which window am i in". ctrl+` is the shortcut on both platforms.</aside>
+<section class="slide" data-title="if something is missing" data-stage="build" data-seg="your machine" data-budget="19">
+  <div class="eyebrow">check this list first · <b>before we check anything else</b></div>
+  <h2>missing one of the four? here is where each one comes from.</h2>
+  <div class="cheat">
+    <div class="r"><div class="q">i don't have vs code</div><div class="a">code.visualstudio.com</div></div>
+    <div class="r"><div class="q">i don't have node or npm</div><div class="a">nodejs.org → the big LTS button</div></div>
+    <div class="r"><div class="q">i don't have git</div><div class="a">mac: xcode-select --install<br>win: git-scm.com</div></div>
+    <div class="r"><div class="q">i don't have the claude panel</div><div class="a">vs code → extensions → "claude code"</div></div>
+  </div>
+  <p style="margin-top:18px">node and npm arrive together, so one download covers both. <strong>if you are downloading something, start it now and keep listening</strong>, you can catch up on the typing in a few minutes.</p>
+  <aside class="note"><b>leave this slide up on the projector while you walk the room.</b> vs code and node are real downloads and on office wifi they are slow, so the goal is to get every download started inside the first two minutes rather than discovering a missing tool at minute twelve. anyone who has to install node will need to close and reopen vs code afterwards, or <code>node -v</code> will still say command not found and they will think it failed. pair anyone still stuck rather than holding the room.</aside>
 </section>
 
 <section class="slide" data-title="node and npm" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1"
   data-terms="node|the program that lets your laptop run javascript outside a browser;;npm|the tool that downloads all the code your project depends on">
-  <div class="eyebrow">two words you will hear constantly · <b>then we check you have them</b></div>
+  <div class="eyebrow">open the terminal, then check two things</div>
   <h2>one runs the code. the other fetches the code other people wrote.</h2>
-  <p style="margin-top:14px"><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project borrows code other people wrote, and npm goes and gets all of it. <strong>that borrowing is the part worth knowing about</strong>, because it is why a feature can be held up by code nobody on your team wrote. if a borrowed piece does not do the thing you asked for, somebody has to upgrade it first, and upgrading it can break the pieces sitting next to it.</p>
+  <p style="margin-top:14px"><strong>node</strong> runs our project. <strong>npm</strong> fetches the code it borrows from other people. <strong>that borrowing is why a feature can be held up by code nobody on your team wrote</strong>, and why upgrading a borrowed piece can break the ones sitting next to it.</p>
+  <p style="margin-top:10px">open the terminal with <code>view → terminal</code>, along the bottom of vs code. <strong>nothing you type can damage your laptop.</strong></p>
   <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>node -v</code><button class="copy" data-copy="node -v">copy</button></div>
   <div class="cmd"><span class="os">mac · win</span><code>npm -v</code><button class="copy" data-copy="npm -v">copy</button></div>
   <div class="expect frag" data-frag="1">two version numbers, something like <em>v22.14.0</em> and <em>10.9.2</em>.
