@@ -391,9 +391,9 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
 <section class="slide act" data-title="act · your machine" data-stage="build" data-seg="your machine" data-budget="19">
   <div class="actnum">stop 2 of 7 · 19 minutes</div>
   <h1>first, does your laptop have the four things</h1>
-  <div class="actdo"><span>the terminal</span><span>node</span><span>git</span><span>claude</span></div>
-  <p style="margin-top:24px">open your laptops now. we check all four, one at a time, and nobody moves on until every screen is green.</p>
-  <aside class="note"><b>laptops open from here to the end.</b> if the prereq email was done properly this takes eight minutes, not fifteen. the spare time is your buffer for the person who ignored it, and there is always one.</aside>
+  <div class="actdo"><span>vs code</span><span>node</span><span>git</span><span>the claude extension</span></div>
+  <p style="margin-top:24px">open your laptops now. we check all four, one at a time, and nobody moves on until every screen is green. <strong>everything today happens inside vs code</strong>, including the terminal, so that is the one thing you must already have installed.</p>
+  <aside class="note"><b>laptops open from here to the end.</b> check the room for vs code before anything else: it is the only item on the list that takes a real download, and somebody will not have it. get that person installing in the background while you carry on with node and git. the spare minutes in this stop are your buffer for exactly that, and there is always one.</aside>
 </section>
 
 <section class="slide" data-title="explain · terminal" data-stage="build" data-seg="your machine" data-budget="19"
@@ -408,11 +408,13 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
 </section>
 
 <section class="slide" data-title="command · open terminal" data-stage="build" data-seg="your machine" data-budget="19">
-  <div class="eyebrow">everyone do this now · <b>two different ways</b></div>
-  <h3 style="margin-bottom:18px">open your terminal</h3>
-  <div class="cmd"><span class="os">mac</span><code>cmd + space → "terminal"</code><button class="copy" data-copy="terminal">copy</button></div>
-  <div class="cmd"><span class="os">windows</span><code>start → "powershell"</code><button class="copy" data-copy="powershell">copy</button></div>
-  <aside class="note"><b>this is the only slide where mac and windows genuinely diverge in a way that matters.</b> find your windows people now and stand near them for the next ten minutes. everything after this is the same command on both.</aside>
+  <div class="eyebrow">everyone do this now · <b>the same on mac and windows</b></div>
+  <h3 style="margin-bottom:18px">open the terminal inside vs code</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>view menu → terminal</code><button class="copy" data-copy="view > terminal">copy</button></div>
+  <div class="expect">a panel opens along the bottom of vs code, with a blinking cursor.
+
+that panel <em>is</em> a terminal. it is the same thing as the mac Terminal app or windows PowerShell, just living inside your editor so you never have to switch windows.</div>
+  <aside class="note"><b>using vs code's built-in terminal instead of the separate app removes an entire category of confusion:</b> no alt-tabbing, no "which window am i in", and the terminal always opens already sitting in the project folder. the keyboard shortcut is ctrl+` on both platforms if anyone asks.</aside>
 </section>
 
 <section class="slide" data-title="explain · node and npm" data-stage="build" data-seg="your machine" data-budget="19"
@@ -483,28 +485,32 @@ for claude there is nothing to type. <em>look down the vs code sidebar for the c
   data-terms="dependencies|code written by other people that our project needs in order to run;;node_modules|the folder where all those downloads land. huge, and never edited by hand">
   <div class="eyebrow">why the next command takes a minute</div>
   <div class="stack">
-    <h2>the project lists what it needs. npm goes and gets all of it.</h2>
+    <h2>one file writes the shopping list. one command does the shopping.</h2>
     <span class="term">package.json → node_modules</span>
-    <p>a file called <code>package.json</code> lists every piece of borrowed code. <code>npm install</code> reads that list and downloads all of it into a folder called <code>node_modules</code>. that folder is enormous, and <strong>nobody ever edits it or uploads it</strong>. it gets rebuilt from the list on every machine.</p>
+    <p>no real project writes all its own code. ours borrows things other people already built, and it keeps <strong>a written list of exactly which ones</strong> in a file called <code>package.json</code>. that list is the next slide, and you can read it.</p>
+    <p><code>npm install</code> reads that list, downloads every item on it, and drops them all into a folder called <code>node_modules</code>. <strong>that folder is 364 megabytes and nobody ever opens it, edits it, or uploads it</strong>, because it can always be rebuilt from the list.</p>
   </div>
-  <aside class="note"><b>keep this slide to the metaphor: the file is a shopping list, the folder is the shopping.</b> the next slide opens the real file properly, so don't pre-empt it here.</aside>
+  <aside class="note"><b>the file is the shopping list, the folder is the shopping.</b> the reason this matters to a PO: "it works on my machine but not on the server" is very often somebody's shopping list being out of date. don't pre-empt the next slide, which shows the actual file.</aside>
 </section>
 
 <section class="slide" data-title="inside package.json" data-stage="build" data-seg="your machine" data-budget="19"
   data-terms="package.json|the file that lists everything the project needs, plus the shortcuts for running it;;scripts|the named shortcuts inside package.json. npm run dev is one of them.">
-  <div class="eyebrow">open it on your screen · <b>it's right there in the folder you just cloned</b></div>
-  <h3 style="margin-bottom:14px">the whole project, described in one small file</h3>
-  <div class="file">
-    <div class="fh">package.json · sitting in the root of the project</div>
-    <ul>
-      <li>"name" <i>what the project is called. that's genuinely all.</i></li>
-      <li>"scripts" <i>the shortcuts. the command you type in two minutes is one of these lines.</i></li>
-      <li>"dependencies" <i>borrowed code the site needs in order to run at all.</i></li>
-      <li>"devDependencies" <i>borrowed code only needed while building it, never by users.</i></li>
-    </ul>
-  </div>
-  <p style="margin-top:16px">two things worth taking from this. <strong>the list is the reason the project runs identically on fifteen different laptops</strong>, and <code>npm run dev</code> is not a real command anywhere in the world, it's a nickname somebody defined on that scripts line.</p>
-  <aside class="note"><b>open the actual file on the projector and scroll it slowly.</b> the scripts point is the one that lands hardest, because in two minutes they'll type a command and now they know where it came from. if someone asks about version numbers like ^15.0.1, say "it means roughly this version or newer" and move on, that rabbit hole is twenty minutes deep.</aside>
+  <div class="eyebrow">open this file on your own screen · <b>this is the real one, all of it</b></div>
+  <h3 style="margin-bottom:14px">this is the entire package.json of the project you just cloned</h3>
+  <div class="expect">{
+  "name": "team-wall",
+  <em>"scripts": {</em>
+    <em>"dev": "next dev",</em>
+    "build": "next build"
+  },
+  <em>"dependencies": {</em>
+    "next": "^16.2.12",
+    "react": "^19.2.8",
+    "zod": "^4.4.3"
+  }
+}</div>
+  <p style="margin-top:16px"><strong>"dependencies" is the shopping list.</strong> four names, four bits of code written by strangers that our site needs to run. <strong>"scripts" is the shortcuts.</strong> in two minutes you will type <code>npm run dev</code>, and that is not a real command anywhere in the world, it is just a nickname for <code>next dev</code> that somebody wrote on that line.</p>
+  <aside class="note"><b>open the real file on the projector next to this slide, they should match.</b> the scripts point lands hardest, because minutes later they type a command and now they know exactly where it came from. if anyone asks about <code>^16.2.12</code>, say "roughly this version or newer" and move on, that rabbit hole is twenty minutes deep.</aside>
 </section>
 
 <section class="slide" data-title="command · npm install" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
@@ -519,14 +525,15 @@ errors in red are not. raise a hand for red.</div>
 </section>
 
 <section class="slide" data-title="explain · localhost" data-stage="build" data-seg="your machine" data-budget="19"
-  data-terms="localhost|the website running on your own laptop, that only you can see">
-  <div class="eyebrow">a word you've definitely heard in standups</div>
+  data-terms="localhost|a nickname for your own computer. the real address is 127.0.0.1.;;domain name|a nickname for a server's address, so people don't have to remember numbers;;port|the door number on an address. 3000 is just the door our site opens on.">
+  <div class="eyebrow">a word you've definitely heard in standups · <b>and it's simpler than it sounds</b></div>
   <div class="stack">
-    <h2>the website, running on your laptop, visible only to you</h2>
-    <span class="term">localhost</span>
-    <p>it's a real, working version of the site. it just isn't on the internet. nobody else can open it, not even on the same wifi. this is why a dev can say <strong>"it works on my machine"</strong> and be telling the truth while the site is broken for everyone else.</p>
+    <h2>every computer on a network has a number. names are just easier to remember.</h2>
+    <span class="term">localhost = 127.0.0.1</span>
+    <p><strong>when you type google.com, your browser does not know what that means.</strong> it looks the name up and gets back a number, an address, and talks to that. the name is a convenience for humans. the number is the real thing.</p>
+    <p><code>localhost</code> is the same trick, pointed at yourself. it is a nickname for <code>127.0.0.1</code>, which every computer reserves to mean <strong>"this machine, right here"</strong>. so <code>localhost:3000</code> is: this very laptop, at door number 3000. type <code>127.0.0.1:3000</code> instead and you get the identical page.</p>
   </div>
-  <aside class="note"><b>"works on my machine" is a phrase they've all heard and none have had explained.</b> explaining it here earns real goodwill. the number after the colon is just a door number, don't get dragged into explaining ports.</aside>
+  <aside class="note"><b>have them actually type 127.0.0.1:3000 once the site is up, it takes five seconds and the penny drops audibly.</b> the domain-name comparison is the part that makes it click, because they already trust that google.com is not literally a place. and this is the slide that explains "works on my machine": the site is real, it just lives at an address only they can reach.</aside>
 </section>
 
 <section class="slide" data-title="command · npm run dev" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
@@ -650,7 +657,7 @@ no spaces, no capitals.</div>
     <li>a save point with a note is a <i>commit</i></li>
     <li>your private copy is a <i>branch</i>, the shared one is <i>main</i></li>
     <li>you made your own and you're standing in it <i>git checkout -b</i></li>
-    <li>the fourth word, <i>pull request</i>, is waiting after the break</li>
+    <li>the fourth word, <i>pull request</i>, comes when we ship <i>stop 7</i></li>
   </ul>
   <aside class="note"><b>send them to break on a cliffhanger.</b> "when you come back you're going to write actual code, and then delete it on purpose." that sentence gets people back on time.</aside>
 </section>
@@ -690,16 +697,17 @@ no spaces, no capitals.</div>
 </section>
 
 <section class="slide" data-title="the request, end to end" data-stage="build" data-seg="the three pieces" data-budget="8" data-frags="5">
-  <div class="eyebrow">one click · <b>five steps, and you already know all three players</b></div>
-  <h2>what happens between you clicking and the screen changing</h2>
+  <div class="eyebrow">something you have all done a hundred times · <b>ordering something online</b></div>
+  <h2>you hit "place order". here is everything that happens next.</h2>
   <div class="day">
-    <div class="row frag" data-frag="1" data-stage="build"><div class="t">1</div><div class="dot"></div><div class="bodyc"><b>you click "add me" on the page</b><span>the screen. the only part of this you can actually see.</span></div></div>
-    <div class="row frag" data-frag="2" data-stage="build"><div class="t">2</div><div class="dot"></div><div class="bodyc"><b>the page sends a request to an address</b><span>the screen talking to the middle bit, with your name attached</span></div></div>
-    <div class="row frag" data-frag="3" data-stage="build"><div class="t">3</div><div class="dot"></div><div class="bodyc"><b>the middle bit checks it and decides what to do</b><span>is this allowed, is the name missing, is it already there</span></div></div>
-    <div class="row frag" data-frag="4" data-stage="build"><div class="t">4</div><div class="dot"></div><div class="bodyc"><b>it writes your name down somewhere permanent</b><span>the store. on a project this small it's one file per person, <code>src/data/members/you.json</code></span></div></div>
-    <div class="row frag" data-frag="5" data-stage="build"><div class="t">5</div><div class="dot"></div><div class="bodyc"><b>it answers, and the page redraws with your card on it</b><span>the whole round trip, usually under a second</span></div></div>
+    <div class="row frag" data-frag="1" data-stage="build"><div class="t">1</div><div class="dot"></div><div class="bodyc"><b>you fill in the basket and hit place order</b><span>the screen. the only part of any of this you can see.</span></div></div>
+    <div class="row frag" data-frag="2" data-stage="build"><div class="t">2</div><div class="dot"></div><div class="bodyc"><b>the page sends your order off to an address</b><span>the screen handing it to the middle bit. the button goes grey and spins.</span></div></div>
+    <div class="row frag" data-frag="3" data-stage="build"><div class="t">3</div><div class="dot"></div><div class="bodyc"><b>the middle bit checks it before trusting it</b><span>is that card valid, is the item still in stock, is the address real</span></div></div>
+    <div class="row frag" data-frag="4" data-stage="build"><div class="t">4</div><div class="dot"></div><div class="bodyc"><b>it writes the order down somewhere permanent</b><span>the store. this is why your order is still there if you close the tab.</span></div></div>
+    <div class="row frag" data-frag="5" data-stage="build"><div class="t">5</div><div class="dot"></div><div class="bodyc"><b>it answers, and the page becomes "order confirmed"</b><span>the whole round trip, usually under a second</span></div></div>
   </div>
-  <aside class="note"><b>walk it with your finger, one press per step, and use "the screen / the middle bit / the store" out loud at each one.</b> be honest about step four: a real product would have a proper database there, and today it's a text file. same idea, smaller. that file is also the one that shows up in the conflict slide later, so name it now.</aside>
+  <p style="margin-top:14px">the wall you are about to change works exactly this way. <strong>you add a card, it gets checked, it gets written down, the page redraws.</strong> the only difference is that our store is a small file rather than a real database.</p>
+  <aside class="note"><b>use the order analogy, not the app's own, because every single person in the room has done it and felt each step.</b> the spinning button is step two, the "card declined" message is step three, and "your order is still in your account tomorrow" is step four. once they have felt it, map it onto the team wall in one sentence and move on.</aside>
 </section>
 
 <section class="slide" data-title="explain · the four asks" data-stage="build" data-seg="the three pieces" data-budget="8"
@@ -735,9 +743,9 @@ no spaces, no capitals.</div>
 <section class="slide act" data-title="act · the harness" data-stage="build" data-seg="the harness" data-budget="28">
   <div class="actnum">stop 5 of 7 · 28 minutes</div>
   <h1>now you write code. and you put a harness on the thing writing it.</h1>
-  <div class="actdo"><span>claude in vs code</span><span>house rules</span><span>skills</span><span>agents</span><span>reading a diff</span></div>
-  <p style="margin-top:24px">most of you already use claude. the goal isn't to teach you to prompt, it's to show you the files that make it behave the same way every time, on every machine, for everyone.</p>
-  <aside class="note"><b>acknowledge that they're already doing this.</b> this room isn't new to AI coding tools, it's new to the guardrails. "you're already driving, here are the brakes" respects them and lands far better than a beginner's tutorial. this is the longest stop of the day, so watch the clock.</aside>
+  <div class="actdo"><span>claude in vs code</span><span>house rules</span><span>rules</span><span>skills</span><span>agents</span><span>permissions</span></div>
+  <p style="margin-top:24px">most of you already use claude. we are not here to teach you to prompt better. we are here to show you the files that make it behave the same way every time, on every machine, for everybody on the team.</p>
+  <aside class="note"><b>acknowledge that they already do this.</b> this room is not new to AI coding tools, it is new to the guardrails. "you are already driving, here are the brakes" respects them and lands far better than a beginner's tutorial. this is the longest stop of the day, so watch the clock and keep the demos short.</aside>
 </section>
 
 <section class="slide" data-title="open the claude panel" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1">
@@ -769,12 +777,43 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   <aside class="note"><b>the reframe that matters: it isn't a claude problem or a you problem, it's a missing-instructions problem, and instructions are just a file you can write.</b> if anyone in the room has a story like this, use theirs instead of the slide, it lands better coming from a colleague.</aside>
 </section>
 
-<section class="slide" data-title="the house rules file" data-stage="build" data-seg="the harness" data-budget="28"
-  data-terms="CLAUDE.md|a plain text file in the project that claude reads at the start of every session. house rules.">
-  <div class="eyebrow">the thing you take home from today</div>
-  <h2>five lines that stop most of the damage</h2>
+<section class="slide" data-title="explain · the harness" data-stage="build" data-seg="the harness" data-budget="28"
+  data-terms="harness|the set of files in a project that tell claude how to behave, so nobody has to remember to ask nicely">
+  <div class="eyebrow">the word for all of it</div>
+  <div class="stack">
+    <h2>files you write once, so it behaves the same way every time</h2>
+    <span class="term">the harness</span>
+    <p>that <code>CLAUDE.md</code> we just talked about is one piece of it. there are five more. they are all plain text files, they all sit in the project, and <strong>they get reviewed in a pull request like any other file</strong>.</p>
+    <p>there is no dashboard, no settings screen and no admin panel. <strong>if you can write a ticket, you can write a harness.</strong> the next slide shows you exactly where they live.</p>
+  </div>
+  <aside class="note"><b>this is the reframe the whole stop hangs on, so say it slowly.</b> the room's mental model of AI tooling is "type a good prompt and hope". the harness replaces hope with files. the sentence to land: you are not learning to prompt better, you are removing the need to prompt well at all.</aside>
+</section>
+
+<section class="slide" data-title="where the harness lives" data-stage="build" data-seg="the harness" data-budget="28">
+  <div class="eyebrow">the project you cloned · <b>open this alongside the slide</b></div>
+  <h3 style="margin-bottom:14px">a normal project folder, with one extra folder in it</h3>
+  <div class="expect">technical-training-pos/
+├── <em>CLAUDE.md</em>            the house rules
+├── TICKET.md            the ticket you are about to paste
+├── package.json         the shopping list from earlier
+├── src/                 the actual website
+│   ├── app/
+│   ├── components/
+│   └── data/members/    one card per person
+└── <em>.claude/</em>             everything else in the harness
+    ├── <em>rules/</em>
+    ├── <em>skills/</em>
+    └── <em>agents/</em></div>
+  <p style="margin-top:16px">that is the whole thing. <strong>one file at the top, and one folder with three folders in it.</strong> we are going to open each one, in that order.</p>
+  <aside class="note"><b>open the real folder in vs code's sidebar on the projector and expand it to match this slide.</b> the point is not the contents yet, it is that the harness is not hidden anywhere clever. it is checked into the repo, everybody who clones gets it, and any one of them can read it. the four green items are the harness, the rest is just the app.</aside>
+</section>
+
+<section class="slide" data-title="1 · CLAUDE.md" data-stage="build" data-seg="the harness" data-budget="28"
+  data-terms="CLAUDE.md|a plain text file in the project root that claude reads at the start of every session">
+  <div class="eyebrow">part one of four · <b>the house rules</b></div>
+  <h2>the file it reads before it does anything else</h2>
   <div class="file">
-    <div class="fh">CLAUDE.md · sitting in the root of the project</div>
+    <div class="fh">CLAUDE.md · in the root of the project</div>
     <ul>
       <li>never rewrite history or force anything. <i>no rebase, no --force. ever.</i></li>
       <li>never commit or push unless i ask. <i>show me first.</i></li>
@@ -783,59 +822,75 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
       <li>if you're unsure, stop and ask. <i>don't guess.</i></li>
     </ul>
   </div>
-  <p style="margin-top:16px">it's already in the repo you cloned. open it. <strong>copy it into any project you work in on monday.</strong></p>
-  <aside class="note"><b>open the real file on screen and read it line by line.</b> tell them to paste it into their own repos and that a dev on their team will thank them for it. then set up the next slide: this file is one piece of something bigger.</aside>
+  <p style="margin-top:16px">nobody has to remember to say any of this. <strong>it is read automatically, at the start of every session, for everyone who clones the project.</strong> copy it into any repo you work in on monday.</p>
+  <aside class="note"><b>open the real file and read it line by line, then say the important part: they did not type any of this today and it was true anyway.</b> this is the single highest-value artifact anybody takes home. tell them a dev on their team will thank them for it.</aside>
 </section>
 
-<section class="slide" data-title="explain · the harness" data-stage="build" data-seg="the harness" data-budget="28"
-  data-terms="harness|the set of files in a project that tell claude how to behave, so you don't have to remember to ask nicely">
-  <div class="eyebrow">the word for all of this</div>
-  <div class="stack">
-    <h2>files you write once, so it behaves the same way every time</h2>
-    <span class="term">the harness</span>
-    <p>that <code>CLAUDE.md</code> is one piece of it. there are a handful of others, they all live in a folder called <code>.claude</code>, and they are all just text files you can read. <strong>none of this is configuration you need a developer for.</strong> if you can write a ticket, you can write a harness.</p>
-  </div>
-  <aside class="note"><b>this is the reframe the whole stop hangs on, say it slowly.</b> the room's mental model of AI tooling is "type a good prompt and hope". the harness replaces hope with files. the sentence to land: you are not prompting better, you are removing the need to prompt well.</aside>
-</section>
-
-<section class="slide" data-title="the .claude folder" data-stage="build" data-seg="the harness" data-budget="28">
-  <div class="eyebrow">open this in vs code right now · <b>it's in the project you cloned</b></div>
-  <h3 style="margin-bottom:14px">everything in the harness, in one folder</h3>
+<section class="slide" data-title="2 · rules" data-stage="build" data-seg="the harness" data-budget="28"
+  data-terms="rules|longer instructions kept in their own files under .claude/rules/, so CLAUDE.md stays short">
+  <div class="eyebrow">part two of four · <b>.claude/rules/</b></div>
+  <h2>when a rule needs a paragraph instead of a line</h2>
   <div class="file">
-    <div class="fh">technical-training-pos · the whole harness</div>
+    <div class="fh">.claude/rules/data-files.md · one file per person</div>
     <ul>
-      <li>CLAUDE.md <i>house rules. read automatically, every session.</i></li>
-      <li>.claude/rules/data-files.md <i>one file per person, and why. the reason you got no conflicts.</i></li>
-      <li>.claude/skills/plan/ <i>ask for it and it tells you what it's about to do, then waits.</i></li>
-      <li>.claude/skills/add-member/ <i>writes your card in the right shape, in the right place.</i></li>
-      <li>.claude/agents/developer.md <i>does the writing. has no terminal, so it cannot run git.</i></li>
-      <li>.claude/settings.json <i>permissions. no rebase, no force push, ever.</i></li>
+      <li>create exactly one file, <i>src/data/members/your-name.json</i></li>
+      <li>never open a card you did not create <i>somebody else's work</i></li>
+      <li>never touch package-lock.json <i>the fastest way to cause a conflict</i></li>
+      <li>never touch src/components or src/lib <i>everybody shares those</i></li>
     </ul>
   </div>
-  <p style="margin-top:16px">six small text files. <strong>that's the entire thing.</strong></p>
-  <aside class="note"><b>actually open the folder on the projector and click through all six.</b> the point is not the contents, it's that there is no magic and no dashboard. they are files in a repo, they get reviewed in a PR like anything else, and a PO can read every one of them.</aside>
+  <p style="margin-top:16px">that's it. <strong>rules are just CLAUDE.md's overflow</strong>, for when an instruction needs explaining rather than stating. this one is the reason none of you hit a merge conflict earlier.</p>
+  <aside class="note"><b>the honest framing: a rule file is what you write when a line in CLAUDE.md needs a "because".</b> this particular one is worth dwelling on for ten seconds, because they already felt its effect without knowing it existed. that is what a good harness feels like.</aside>
 </section>
 
-<section class="slide" data-title="explain · skills" data-stage="build" data-seg="the harness" data-budget="28"
-  data-terms="skill|written instructions for one job, that claude picks up when that job comes round">
-  <div class="eyebrow">the first piece · <b>a job, written down</b></div>
-  <div class="stack">
-    <h2>a job you want done the same way every time, written down once</h2>
-    <span class="term">a skill</span>
-    <p>this project has two. <code>add-member</code> knows the exact shape of a card file and where it goes, so nobody has to remember. <code>plan</code> works out what a task is about to change and then stops. <strong>you don't run a skill with a magic command, you just ask for the thing</strong>, and it gets picked up because the job matches.</p>
+<section class="slide" data-title="3 · skills" data-stage="build" data-seg="the harness" data-budget="28"
+  data-terms="skill|written instructions for one job, kept in .claude/skills/, that claude picks up when that job comes round">
+  <div class="eyebrow">part three of four · <b>.claude/skills/</b></div>
+  <h2>a job you want done the same way every time, written down once</h2>
+  <div class="stages">
+    <div class="stg" data-k="build"><b>plan</b><span>works out which file a task will change and what will go in it, shows you, and then stops and waits. you only get this one if you ask for it.</span></div>
+    <div class="stg" data-k="build"><b>add-member</b><span>knows the exact shape of a card file and where it goes, so nobody has to remember. this is the one that writes your card.</span></div>
   </div>
-  <aside class="note"><b>the honest comparison is a recipe card, or a runbook.</b> a skill is what you write the third time you explain the same thing to somebody. worth saying out loud that they already write these, they just call them tickets and confluence pages.</aside>
+  <p style="margin-top:18px">the nearest thing you already have is <strong>a runbook, or a recipe card</strong>. it is what you write the third time you explain the same job to somebody. <strong>you don't run a skill with a magic command</strong>, you just ask for the thing you want and it gets picked up because the job matches.</p>
+  <aside class="note"><b>they already write these, they just call them confluence pages.</b> the difference is that a skill is read by the thing doing the work rather than by a human who might skim it. demo it live: type "add me to the wall" and let them watch add-member fire without anybody naming it.</aside>
 </section>
 
-<section class="slide" data-title="explain · agents" data-stage="build" data-seg="the harness" data-budget="28"
-  data-terms="agent|a separate claude with one job and its own limited set of tools;;subagent|the same thing. the word people use when it's been handed work by the main session.">
-  <div class="eyebrow">the second piece · <b>a specialist you hand work to</b></div>
-  <div class="stack">
-    <h2>a separate claude, with one job and a shorter list of things it's allowed to touch</h2>
-    <span class="term">an agent · a subagent</span>
-    <p>this project has one, called <code>developer</code>. it takes an approved plan and writes the card file. <strong>it has no terminal at all</strong>, which means it physically cannot run a git command, commit, or push, no matter what anybody types at it. that isn't a rule asking nicely. it's a missing tool.</p>
+<section class="slide" data-title="4 · agents" data-stage="build" data-seg="the harness" data-budget="28"
+  data-terms="agent|a separate claude with one job and a shorter list of tools it is allowed to use">
+  <div class="eyebrow">part four of four · <b>.claude/agents/</b></div>
+  <h2>a separate claude, with one job and a shorter list of things it can touch</h2>
+  <div class="split">
+    <div class="pane pain">
+      <span class="tag">the main chat</span>
+      <h3>can do everything</h3>
+      <p>read, write, run terminal commands, run git. useful, and it is holding your whole conversation in its head.</p>
+    </div>
+    <div class="pane fix">
+      <span class="tag">the developer agent</span>
+      <h3>can only write files</h3>
+      <p><strong>it has no terminal at all.</strong> it physically cannot run git, commit, or push, no matter what anybody types at it. that is not a rule being obeyed. it is a missing tool.</p>
+    </div>
   </div>
-  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> an agent isn't a smarter claude, it's a narrower one, and narrower is safer. if someone asks why not just tell it not to, that's the next slide but one.</aside>
+  <p style="margin-top:16px">this project has one agent, called <code>developer</code>. it takes a job and writes the one file. <strong>an agent isn't a smarter claude, it's a narrower one</strong>, and narrower is safer.</p>
+  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> if somebody asks why you would not just tell the main chat not to run git, that is the very next slide, so hold the thought and use their question to introduce it.</aside>
+</section>
+
+<section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
+  data-terms="permissions|the allow and deny lists in .claude/settings.json. the only part of the harness that cannot be talked round.">
+  <div class="eyebrow">the most important slide in this stop · <b>do not skip it</b></div>
+  <div class="split">
+    <div class="pane pain">
+      <span class="tag">CLAUDE.md asks</span>
+      <h3>house rules are instructions, and instructions can be missed</h3>
+      <p>"never commit without asking" works nearly always. nearly. it is text being read by something that makes judgement calls, so treat it as a very good default rather than a lock.</p>
+    </div>
+    <div class="pane fix frag" data-frag="1">
+      <span class="tag">settings.json forbids</span>
+      <h3>permissions are a wall. there is no talking round them.</h3>
+      <p>this project's deny list blocks <code>rebase</code>, <code>push --force</code> and <code>reset --hard</code> outright. <strong>if it really matters, don't ask for it. remove the ability.</strong></p>
+    </div>
+  </div>
+  <aside class="note"><b>this is the slide that stops them over-trusting a text file, and it is the difference between a harness and a wish.</b> the rule of thumb to give them: if the worst case is annoying, a line in CLAUDE.md is fine. if the worst case is expensive, take the tool away instead.</aside>
 </section>
 
 <section class="slide" data-title="the whole flow" data-stage="build" data-seg="the harness" data-budget="28" data-frags="5">
@@ -849,24 +904,6 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
     <div class="row frag" data-frag="5" data-stage="build"><div class="t">5</div><div class="dot"></div><div class="bodyc"><b>it calls the add-member skill, and your card exists</b><span>one file. nothing else touched. you commit it yourself.</span></div></div>
   </div>
   <aside class="note"><b>step three is the one to dwell on: an agent cannot stop halfway to ask you a question, so the gate has to sit with you, in the chat, between the two halves. you are the handoff.</b> and step two is optional on purpose, which is the honest way to show what asking for a plan actually buys you.</aside>
-</section>
-
-<section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
-  data-terms="permissions|the allow and deny lists in settings.json. the only part of the harness that cannot be talked round.">
-  <div class="eyebrow">the most important slide in this stop · <b>do not skip it</b></div>
-  <div class="split">
-    <div class="pane pain">
-      <span class="tag">CLAUDE.md asks</span>
-      <h3>house rules are strong instructions, and instructions can be missed</h3>
-      <p>"never commit without asking" works nearly always. nearly. it's text being read by something that makes judgement calls, so treat it as a very good default, not a lock.</p>
-    </div>
-    <div class="pane fix frag" data-frag="1">
-      <span class="tag">settings.json forbids</span>
-      <h3>permissions are a wall. there is no talking round them.</h3>
-      <p>this project's deny list blocks <code>rebase</code>, <code>push --force</code> and <code>reset --hard</code> outright. and the developer agent has no terminal at all. <strong>if it really matters, don't ask for it, remove the ability.</strong></p>
-    </div>
-  </div>
-  <aside class="note"><b>this is the slide that stops them over-trusting a text file, and it's the difference between a harness and a wish.</b> the rule of thumb to give them: if the worst case is annoying, a rule in CLAUDE.md is fine. if the worst case is expensive, take the tool away instead.</aside>
 </section>
 
 <section class="slide" data-title="when to use what" data-stage="build" data-seg="the harness" data-budget="28">
@@ -915,13 +952,13 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   <h2>you shipped a change by writing a ticket</h2>
   <ul class="recap">
     <li>opened claude where it can touch real files <i>vs code · the project folder</i></li>
-    <li>found the six text files that make it behave <i>CLAUDE.md · .claude/</i></li>
-    <li>learned which piece is for which situation <i>rules · skills · agents · permissions</i></li>
+    <li>found the four parts of the harness, and where each one lives <i>CLAUDE.md · rules · skills · agents</i></li>
+    <li>learned which part is for which situation <i>the table you photographed</i></li>
     <li>saw the difference between a rule and a wall <i>CLAUDE.md asks · settings.json forbids</i></li>
-    <li>pasted a ticket and got exactly one file back <i>plan → developer → add-member</i></li>
+    <li>pasted a ticket and got back exactly one file <i>plan → developer → add-member</i></li>
     <li>read the diff before accepting it <i>diff</i></li>
   </ul>
-  <aside class="note"><b>lead into the next stop with the promise you planted back in stop 2:</b> "i said you never lose an old version. next twelve minutes we prove it, and you're all going to delete your work to find out."</aside>
+  <aside class="note"><b>lead into the next stop with the promise you planted back in stop 2:</b> "i said you never lose an old version. next twelve minutes we prove it, and you are all going to delete your work on purpose to find out."</aside>
 </section>
 
 <!-- STOP 6 · THE UNDO KIT -->
