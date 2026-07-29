@@ -780,12 +780,13 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   data-terms="harness|the set of files in a project that tell claude how to behave, so nobody has to remember to ask nicely">
   <div class="eyebrow">the word for all of it</div>
   <div class="stack">
-    <h2>files you write once, so it behaves the same way every time</h2>
+    <h2>a handful of plain text files that make it behave the same way every time</h2>
     <span class="term">the harness</span>
-    <p>that <code>CLAUDE.md</code> we just talked about is one piece of it. there are five more. they are all plain text files, they all sit in the project, and <strong>they get reviewed in a pull request like any other file</strong>.</p>
-    <p>there is no dashboard, no settings screen and no admin panel. <strong>if you can write a ticket, you can write a harness.</strong> the next slide shows you exactly where they live.</p>
+    <p>that <code>CLAUDE.md</code> we just mentioned is the first of five, and we are about to open it. the other four are the same kind of thing: short, plain english, and <strong>none of them is code</strong>.</p>
+    <p>the reason they work is that <strong>claude reads them by itself, at the start of every session.</strong> nobody has to remember to paste the rules in, and nobody can forget.</p>
+    <p>and because the files are inside the project rather than saved on your laptop, <strong>everyone who downloads the project gets the same rules</strong>. including whoever joins the team next month.</p>
   </div>
-  <aside class="note"><b>this is the reframe the whole stop hangs on, so say it slowly.</b> the room's mental model of AI tooling is "type a good prompt and hope". the harness replaces hope with files. the sentence to land: you are not learning to prompt better, you are removing the need to prompt well at all.</aside>
+  <aside class="note"><b>this is the reframe the whole stop hangs on, so say it slowly.</b> the room's mental model of AI tooling is "type a good prompt and hope for the best". the harness replaces the hoping with files. the sentence to land: you are not learning to prompt better, you are removing the need to prompt well at all. the "everyone who downloads it gets the same rules" point is the one that matters to a PO, because it means the guardrails do not leave when the person who wrote them goes on holiday.</aside>
 </section>
 
 <section class="slide" data-title="where the harness lives" data-stage="build" data-seg="the harness" data-budget="28">
@@ -802,14 +803,15 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 └── <em>.claude/</em>             everything else in the harness
     ├── <em>rules/</em>
     ├── <em>skills/</em>
-    └── <em>agents/</em></div>
-  <p style="margin-top:16px">that is the whole thing. <strong>one file at the top, and one folder with three folders in it.</strong> we are going to open each one, in that order.</p>
-  <aside class="note"><b>open the real folder in vs code's sidebar on the projector and expand it to match this slide.</b> the point is not the contents yet, it is that the harness is not hidden anywhere clever. it is checked into the repo, everybody who clones gets it, and any one of them can read it. the four green items are the harness, the rest is just the app.</aside>
+    ├── <em>agents/</em>
+    └── <em>settings.json</em></div>
+  <p style="margin-top:16px">that is the whole thing. <strong>one file at the top, and one folder holding four more.</strong> we are going to open all five, in that order.</p>
+  <aside class="note"><b>open the real folder in vs code's sidebar on the projector and expand it to match this slide.</b> the point is not the contents yet, it is that the harness is not hidden anywhere clever. it is checked into the repo, everybody who clones gets it, and any one of them can read it. the five green items are the harness, everything else is just the app.</aside>
 </section>
 
 <section class="slide" data-title="1 · CLAUDE.md" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="CLAUDE.md|a plain text file in the project root that claude reads at the start of every session">
-  <div class="eyebrow">part one of four · <b>the house rules</b></div>
+  <div class="eyebrow">part one of five · <b>the house rules</b></div>
   <h2>the file it reads before it does anything else</h2>
   <div class="file">
     <div class="fh">CLAUDE.md · in the root of the project</div>
@@ -827,7 +829,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="2 · rules" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="rules|longer instructions kept in their own files under .claude/rules/, so CLAUDE.md stays short">
-  <div class="eyebrow">part two of four · <b>.claude/rules/</b></div>
+  <div class="eyebrow">part two of five · <b>.claude/rules/</b></div>
   <h2>when a rule needs a paragraph instead of a line</h2>
   <div class="file">
     <div class="fh">.claude/rules/data-files.md · one file per person</div>
@@ -844,7 +846,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="3 · skills" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="skill|written instructions for one job, kept in .claude/skills/, that claude picks up when that job comes round">
-  <div class="eyebrow">part three of four · <b>.claude/skills/</b></div>
+  <div class="eyebrow">part three of five · <b>.claude/skills/</b></div>
   <h2>a job you want done the same way every time, written down once</h2>
   <div class="stages">
     <div class="stg" data-k="build"><b>plan</b><span>works out which file a task will change and what will go in it, shows you, and then stops and waits. you only get this one if you ask for it.</span></div>
@@ -856,7 +858,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="4 · agents" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="agent|a separate claude with one job and a shorter list of tools it is allowed to use">
-  <div class="eyebrow">part four of four · <b>.claude/agents/</b></div>
+  <div class="eyebrow">part four of five · <b>.claude/agents/</b></div>
   <h2>a separate claude, with one job and a shorter list of things it can touch</h2>
   <div class="split">
     <div class="pane pain">
@@ -876,7 +878,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
   data-terms="permissions|the allow and deny lists in .claude/settings.json. the only part of the harness that cannot be talked round.">
-  <div class="eyebrow">the most important slide in this stop · <b>do not skip it</b></div>
+  <div class="eyebrow">part five of five · <b>.claude/settings.json</b></div>
   <div class="split">
     <div class="pane pain">
       <span class="tag">CLAUDE.md asks</span>
@@ -889,7 +891,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
       <p>this project's deny list blocks <code>rebase</code>, <code>push --force</code> and <code>reset --hard</code> outright. <strong>if it really matters, don't ask for it. remove the ability.</strong></p>
     </div>
   </div>
-  <aside class="note"><b>this is the slide that stops them over-trusting a text file, and it is the difference between a harness and a wish.</b> the rule of thumb to give them: if the worst case is annoying, a line in CLAUDE.md is fine. if the worst case is expensive, take the tool away instead.</aside>
+  <aside class="note"><b>do not skip this one. it stops them over-trusting a text file, and it is the difference between a harness and a wish.</b> the rule of thumb to give them: if the worst case is annoying, a line in CLAUDE.md is fine. if the worst case is expensive, take the tool away instead.</aside>
 </section>
 
 <section class="slide" data-title="the whole flow" data-stage="build" data-seg="the harness" data-budget="28" data-frags="5">
