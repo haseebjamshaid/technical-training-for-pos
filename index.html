@@ -401,12 +401,12 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
   <h2>missing one of the four? here is where each one comes from.</h2>
   <div class="cheat">
     <div class="r"><div class="q">i don't have vs code</div><div class="a">code.visualstudio.com</div></div>
-    <div class="r"><div class="q">i don't have node or npm</div><div class="a">nodejs.org → the big LTS button</div></div>
+    <div class="r"><div class="q">i don't have node or npm</div><div class="a">nodejs.org/en/download</div></div>
     <div class="r"><div class="q">i don't have git</div><div class="a">mac: xcode-select --install<br>win: git-scm.com</div></div>
     <div class="r"><div class="q">i don't have the claude panel</div><div class="a">vs code → extensions → "claude code"</div></div>
   </div>
-  <p style="margin-top:18px">node and npm arrive together, so one download covers both. <strong>if you are downloading something, start it now and keep listening</strong>, you can catch up on the typing in a few minutes.</p>
-  <aside class="note"><b>leave this slide up on the projector while you walk the room.</b> vs code and node are real downloads and on office wifi they are slow, so the goal is to get every download started inside the first two minutes rather than discovering a missing tool at minute twelve. anyone who has to install node will need to close and reopen vs code afterwards, or <code>node -v</code> will still say command not found and they will think it failed. pair anyone still stuck rather than holding the room.</aside>
+  <p style="margin-top:18px">node and npm arrive together, so that one download covers both, and <strong>that page gives you either an installer to click or a terminal command to paste</strong>, whichever you prefer. <strong>if you are downloading anything, start it now and keep listening</strong>, the typing is easy to catch up on.</p>
+  <aside class="note"><b>leave this slide up on the projector while you walk the room.</b> the real goal is that nobody arrives needing any of this, so send these four lines round the day before. on the day, get every download started inside the first two minutes rather than finding a missing tool at minute twelve. two things that will bite: <b>after installing node, they must close and reopen vs code</b> or <code>node -v</code> still says command not found and they assume it failed. and <code>xcode-select --install</code> is a one to two gigabyte download, so on office wifi that person is pairing up today, not installing.</aside>
 </section>
 
 <section class="slide" data-title="node and npm" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1"
@@ -870,7 +870,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   <h2>your ticket goes in one end, one file comes out the other</h2>
   <div class="day">
     <div class="row frag" data-frag="1" data-stage="build"><div class="t">1</div><div class="dot"></div><div class="bodyc"><b>you paste your ticket</b><span>before anything else, it reads CLAUDE.md. you didn't have to ask.</span></div></div>
-    <div class="row frag" data-frag="2" data-stage="build"><div class="t">2</div><div class="dot"></div><div class="bodyc"><b>you add "plan this first" — only if you want to</b><span>the plan skill says which file, and exactly what goes in it</span></div></div>
+    <div class="row frag" data-frag="2" data-stage="build"><div class="t">2</div><div class="dot"></div><div class="bodyc"><b>you add "plan this first", only if you want to</b><span>the plan skill says which file, and exactly what goes in it</span></div></div>
     <div class="row frag" data-frag="3" data-stage="build"><div class="t">3</div><div class="dot"></div><div class="bodyc"><b>you read it and say go</b><span>nothing has been written yet. this gate is you.</span></div></div>
     <div class="row frag" data-frag="4" data-stage="build"><div class="t">4</div><div class="dot"></div><div class="bodyc"><b>the developer agent picks it up</b><span>the house rules send the work to the specialist, not to the main chat</span></div></div>
     <div class="row frag" data-frag="5" data-stage="build"><div class="t">5</div><div class="dot"></div><div class="bodyc"><b>it calls the add-member skill, and your card exists</b><span>one file. nothing else touched. you commit it yourself.</span></div></div>
