@@ -396,49 +396,29 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
   <aside class="note"><b>laptops open from here to the end.</b> check the room for vs code before anything else: it is the only item on the list that takes a real download, and somebody will not have it. get that person installing in the background while you carry on with node and git. the spare minutes in this stop are your buffer for exactly that, and there is always one.</aside>
 </section>
 
-<section class="slide" data-title="explain · terminal" data-stage="build" data-seg="your machine" data-budget="19"
+<section class="slide" data-title="the terminal" data-stage="build" data-seg="your machine" data-budget="19"
   data-terms="terminal|a window where you type commands to your computer instead of clicking things">
-  <div class="eyebrow">plain english first · <b>then the word</b></div>
-  <div class="stack">
-    <h2>a window where you type instructions instead of clicking them</h2>
-    <span class="term">the terminal</span>
-    <p>that's the whole idea. clicking a folder open and typing <code>cd folder</code> do exactly the same thing. devs type because it's faster, and because a typed instruction can be saved and run again tomorrow. <strong>nothing you type today can damage your laptop.</strong></p>
-  </div>
-  <aside class="note"><b>the fear here is real and worth thirty seconds.</b> say plainly: nothing in this session touches anything outside one folder we're about to download. the black window is not a hacker movie, it's a filing cabinet with a keyboard.</aside>
+  <div class="eyebrow">plain english first · <b>then we open one</b></div>
+  <h2>a window where you type instructions instead of clicking them</h2>
+  <p style="margin-top:14px">that is the whole idea. clicking a folder open, and typing <code>cd folder</code>, do exactly the same thing. developers type because it is faster, and because <strong>a typed instruction can be saved and run again tomorrow</strong>. nothing you type today can damage your laptop.</p>
+  <div class="cmd" style="margin-top:20px"><span class="os">mac · win</span><code>view menu → terminal</code><button class="copy" data-copy="view > terminal">copy</button></div>
+  <div class="expect">a panel opens along the bottom of vs code, with a blinking cursor. <em>that panel is a terminal.</em>
+
+it is the same thing as the mac Terminal app or windows PowerShell, just living inside your editor, already sitting in your project folder.</div>
+  <aside class="note"><b>the fear here is real and worth thirty seconds.</b> say plainly: nothing today touches anything outside the one folder we are about to download. the black window is not a hacker movie, it is a filing cabinet with a keyboard. using vs code's own terminal kills a whole category of confusion, no alt-tabbing and no "which window am i in". ctrl+` is the shortcut on both platforms.</aside>
 </section>
 
-<section class="slide" data-title="command · open terminal" data-stage="build" data-seg="your machine" data-budget="19">
-  <div class="eyebrow">everyone do this now · <b>the same on mac and windows</b></div>
-  <h3 style="margin-bottom:18px">open the terminal inside vs code</h3>
-  <div class="cmd"><span class="os">mac · win</span><code>view menu → terminal</code><button class="copy" data-copy="view > terminal">copy</button></div>
-  <div class="expect">a panel opens along the bottom of vs code, with a blinking cursor.
-
-that panel <em>is</em> a terminal. it is the same thing as the mac Terminal app or windows PowerShell, just living inside your editor so you never have to switch windows.</div>
-  <aside class="note"><b>using vs code's built-in terminal instead of the separate app removes an entire category of confusion:</b> no alt-tabbing, no "which window am i in", and the terminal always opens already sitting in the project folder. the keyboard shortcut is ctrl+` on both platforms if anyone asks.</aside>
-</section>
-
-<section class="slide" data-title="explain · node and npm" data-stage="build" data-seg="your machine" data-budget="19"
+<section class="slide" data-title="node and npm" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1"
   data-terms="node|the program that lets your laptop run javascript outside a browser;;npm|the tool that downloads all the code your project depends on">
-  <div class="eyebrow">two words you'll hear constantly</div>
-  <div class="stack">
-    <h2>one runs the code. the other fetches the code other people wrote.</h2>
-    <span class="term">node · npm</span>
-    <p><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project depends on about 400 pieces of code written by strangers, and npm goes and gets all of them. when a dev says <strong>"we need to bump that dependency"</strong>, this is what they mean.</p>
-  </div>
-  <aside class="note"><b>the 400 strangers line always gets a reaction, use it.</b> it's also the honest answer to "why is this folder 300 megabytes". this slide is vocabulary only, the install has its own slide shortly.</aside>
-</section>
-
-<section class="slide" data-title="command · node -v" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
-  <div class="eyebrow">type both · <b>same on mac and windows</b></div>
-  <h3 style="margin-bottom:18px">check node and npm are installed</h3>
-  <div class="cmd"><span class="os">mac · win</span><code>node -v</code><button class="copy" data-copy="node -v">copy</button></div>
+  <div class="eyebrow">two words you will hear constantly · <b>then we check you have them</b></div>
+  <h2>one runs the code. the other fetches the code other people wrote.</h2>
+  <p style="margin-top:14px"><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project borrows code other people wrote, and npm goes and gets all of it. when a developer says <strong>"we need to bump that dependency"</strong>, this is the thing they mean.</p>
+  <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>node -v</code><button class="copy" data-copy="node -v">copy</button></div>
   <div class="cmd"><span class="os">mac · win</span><code>npm -v</code><button class="copy" data-copy="npm -v">copy</button></div>
-  <div class="expect frag" data-frag="1">you should see two version numbers, something like:
-<em>v22.14.0</em>
-<em>10.9.2</em>
+  <div class="expect frag" data-frag="1">two version numbers, something like <em>v22.14.0</em> and <em>10.9.2</em>.
 
-if you see <s>command not found</s>, raise your hand.</div>
-  <aside class="note"><b>the exact numbers don't matter, only that a number appears.</b> anyone getting "command not found" needs node from nodejs.org, which takes four minutes on good wifi and twenty on ours. this is precisely why the prereq email exists.</aside>
+the exact numbers do not matter. only that a number appears. if you see <s>command not found</s>, raise your hand.</div>
+  <aside class="note"><b>the exact numbers are irrelevant, only that something prints.</b> anyone getting "command not found" needs node from nodejs.org, which is four minutes on good wifi and twenty on ours, so start them downloading and carry on with the rest of the room.</aside>
 </section>
 
 <section class="slide" data-title="command · git and claude" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
@@ -458,27 +438,17 @@ for claude there is nothing to type. <em>look down the vs code sidebar for the c
   <aside class="note"><b>hard gate.</b> count hands out loud so people know you're genuinely waiting. co-facilitator floats. anyone still broken after three minutes pairs up rather than holding the room.</aside>
 </section>
 
-<section class="slide" data-title="explain · repo" data-stage="build" data-seg="your machine" data-budget="19"
-  data-terms="repo|the project folder, with a full history of every change anyone has ever made to it">
-  <div class="eyebrow">the thing we're about to download</div>
-  <div class="stack">
-    <h2>a project folder that remembers every change anyone has ever made to it</h2>
-    <span class="term">repo · repository</span>
-    <p>it looks like an ordinary folder. the difference is the complete history attached to it: who changed what, when, and why. <strong>you never lose an old version</strong>, which is the most useful property of the whole system, and the reason today's session ends the way it does.</p>
-  </div>
-  <aside class="note"><b>plant the seed here for the undo kit.</b> "you never lose an old version" is the line you cash in during stop 6 when everyone deletes their work on purpose. say it now so it pays off later.</aside>
-</section>
-
-<section class="slide" data-title="command · clone" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
-  <div class="eyebrow">download the project · <b>swap in your real repo url</b></div>
-  <h3 style="margin-bottom:18px">get your own copy onto your laptop</h3>
-  <div class="cmd"><span class="os">mac · win</span><code>git clone https://github.com/abdulhaseeb08/technical-training-pos.git</code><button class="copy" data-copy="git clone https://github.com/abdulhaseeb08/technical-training-pos.git">copy</button></div>
+<section class="slide" data-title="the repo, and cloning it" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1"
+  data-terms="repo|the project folder, with a full history of every change anyone has ever made to it;;clone|to download your own complete copy of a repo">
+  <div class="eyebrow">what we are downloading · <b>and then downloading it</b></div>
+  <h2>a project folder that remembers every change anyone has ever made to it</h2>
+  <p style="margin-top:14px">it looks like an ordinary folder. the difference is the complete history attached: who changed what, when, and why. <strong>you never lose an old version</strong>, which is the most useful property of the whole system, and the reason this session ends the way it does.</p>
+  <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>git clone https://github.com/abdulhaseeb08/technical-training-pos.git</code><button class="copy" data-copy="git clone https://github.com/abdulhaseeb08/technical-training-pos.git">copy</button></div>
   <div class="cmd"><span class="os">mac · win</span><code>cd technical-training-pos</code><button class="copy" data-copy="cd technical-training-pos">copy</button></div>
-  <div class="expect frag" data-frag="1"><em>Cloning into 'technical-training-pos'...</em>
-<em>Resolving deltas: 100% done.</em>
+  <div class="expect frag" data-frag="1"><em>Cloning into 'technical-training-pos'... done.</em>
 
-<s>the second command is the one people forget.</s> clone puts you next to the folder, cd walks you into it.</div>
-  <aside class="note"><b>then open that folder in vs code: file, open folder, pick <code>technical-training-pos</code> itself.</b> not the folder above it. claude reads the house rules from the folder you open, so opening the parent silently gives you a claude with no rules and nobody notices until it does something daft. the <code>cd</code> step is the other silent failure, make them read their terminal prompt out loud.</aside>
+<s>the second command is the one people forget.</s> clone puts the folder next to you, cd walks you into it.</div>
+  <aside class="note"><b>plant the seed here for stop 6: "you never lose an old version" is the line you cash in when everyone deletes their work on purpose.</b> then open the folder in vs code, file, open folder, pick <code>technical-training-pos</code> itself and not the folder above it. claude reads the house rules from the folder you open, so opening the parent silently gives you a claude with no rules. make them read their terminal prompt out loud too.</aside>
 </section>
 
 <section class="slide" data-title="explain · dependencies" data-stage="build" data-seg="your machine" data-budget="19"
