@@ -45,6 +45,10 @@ p{font-size:clamp(15px,1.45vw,20px);line-height:1.6;color:var(--muted);max-width
 p strong{color:var(--body);font-weight:500}
 p code,li code,h2 code,h3 code{font-family:var(--mono);color:var(--ui);font-size:.92em}
 .term{font-family:var(--mono);font-size:clamp(17px,1.9vw,25px);font-weight:500;color:var(--ui);margin-top:12px;display:inline-block}
+/* .subject · for slides named after a thing, the thing IS the heading. a wall of
+   full-sentence headings makes every slide in a run look identical from the back row. */
+.subject{font-family:var(--mono);color:var(--ui);font-size:clamp(23px,3.3vw,44px);font-weight:500;letter-spacing:-.01em;line-height:1.12;word-break:break-word}
+.subline{font-size:clamp(16px,1.7vw,23px);color:var(--body);line-height:1.4;margin-top:12px;max-width:44ch}
 .stack>*+*{margin-top:18px}
 .frag{opacity:0;transform:translateY(10px);transition:opacity .32s ease,transform .32s cubic-bezier(.2,.7,.3,1)}
 .frag.on{opacity:1;transform:none}
@@ -761,6 +765,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="pain · undo" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1">
   <div class="eyebrow">a real thing that happens · <b>and the fix</b></div>
+  <h2 style="margin-bottom:16px;max-width:34ch">you asked it to look at one file. it changed nine.</h2>
   <div class="split">
     <div class="pane pain">
       <span class="tag">what goes wrong</span>
@@ -780,8 +785,8 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   data-terms="harness|the set of files in a project that tell claude how to behave, so nobody has to remember to ask nicely">
   <div class="eyebrow">the word for all of it</div>
   <div class="stack">
-    <h2>a handful of plain text files that make it behave the same way every time</h2>
-    <span class="term">the harness</span>
+    <h2 class="subject">the harness</h2>
+    <p class="subline">a handful of plain text files that make it behave the same way every time.</p>
     <p>that <code>CLAUDE.md</code> we just mentioned is the first of five, and we are about to open it. the other four are the same kind of thing: short, plain english, and <strong>none of them is code</strong>.</p>
     <p>the reason they work is that <strong>claude reads them by itself, at the start of every session.</strong> nobody has to remember to paste the rules in, and nobody can forget.</p>
     <p>and because the files are inside the project rather than saved on your laptop, <strong>everyone who downloads the project gets the same rules</strong>. including whoever joins the team next month.</p>
@@ -812,7 +817,8 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 <section class="slide" data-title="1 · CLAUDE.md" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="CLAUDE.md|a plain text file in the project root that claude reads at the start of every session">
   <div class="eyebrow">part one of five · <b>the house rules</b></div>
-  <h2>the file it reads before it does anything else</h2>
+  <h2 class="subject">CLAUDE.md</h2>
+  <p class="subline">the file it reads before it does anything else.</p>
   <div class="file">
     <div class="fh">CLAUDE.md · in the root of the project</div>
     <ul>
@@ -830,7 +836,8 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 <section class="slide" data-title="2 · rules" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="rules|longer instructions kept in their own files under .claude/rules/, so CLAUDE.md stays short">
   <div class="eyebrow">part two of five · <b>.claude/rules/</b></div>
-  <h2>when a rule needs a paragraph instead of a line</h2>
+  <h2 class="subject">.claude/rules/</h2>
+  <p class="subline">for when a rule needs a paragraph instead of a line.</p>
   <div class="file">
     <div class="fh">.claude/rules/data-files.md · one file per person</div>
     <ul>
@@ -847,7 +854,8 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 <section class="slide" data-title="3 · skills" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="skill|written instructions for one job, kept in .claude/skills/, that claude picks up when that job comes round">
   <div class="eyebrow">part three of five · <b>.claude/skills/</b></div>
-  <h2>a job you want done the same way every time, written down once</h2>
+  <h2 class="subject">.claude/skills/</h2>
+  <p class="subline">a job you want done the same way every time, written down once.</p>
   <div class="stages">
     <div class="stg" data-k="build"><b>plan</b><span>works out which file a task will change and what will go in it, shows you, and then stops and waits. you only get this one if you ask for it.</span></div>
     <div class="stg" data-k="build"><b>add-member</b><span>knows the exact shape of a card file and where it goes, so nobody has to remember. this is the one that writes your card.</span></div>
@@ -859,7 +867,8 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 <section class="slide" data-title="4 · agents" data-stage="build" data-seg="the harness" data-budget="28"
   data-terms="agent|a separate claude with one job and a shorter list of tools it is allowed to use">
   <div class="eyebrow">part four of five · <b>.claude/agents/</b></div>
-  <h2>a separate claude, with one job and a shorter list of things it can touch</h2>
+  <h2 class="subject">.claude/agents/</h2>
+  <p class="subline">a separate claude, with one job and a shorter list of things it can touch.</p>
   <div class="split">
     <div class="pane pain">
       <span class="tag">the main chat</span>
@@ -878,8 +887,10 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
   data-terms="permissions|the allow and deny lists in .claude/settings.json. the only part of the harness that cannot be talked round.">
-  <div class="eyebrow">part five of five · <b>.claude/settings.json</b></div>
-  <div class="split">
+  <div class="eyebrow">part five of five · <b>permissions</b></div>
+  <h2 class="subject">.claude/settings.json</h2>
+  <p class="subline">the only part of the harness that cannot be argued with.</p>
+  <div class="split" style="margin-top:18px">
     <div class="pane pain">
       <span class="tag">CLAUDE.md asks</span>
       <h3>house rules are instructions, and instructions can be missed</h3>
@@ -909,7 +920,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
 
 <section class="slide" data-title="when to use what" data-stage="build" data-seg="the harness" data-budget="28">
   <div class="eyebrow">screenshot this one</div>
-  <h2>six pieces, and the one situation each is for</h2>
+  <h2>which one do you reach for?</h2>
   <div class="cheat">
     <div class="r"><div class="q">the same rules, every session, for everybody</div><div class="a">CLAUDE.md</div></div>
     <div class="r"><div class="q">a longer rule i don't want cluttering CLAUDE.md</div><div class="a">.claude/rules/</div></div>
@@ -918,7 +929,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
     <div class="r"><div class="q">show me the change before you make it</div><div class="a">plan mode · a plan skill</div></div>
     <div class="r"><div class="q">it must not be able to do that. ever.</div><div class="a">settings.json</div></div>
   </div>
-  <p style="margin-top:18px">there's a seventh, <strong>workflows</strong>, for chaining a lot of agents together. <strong>you won't need it this year.</strong></p>
+  <p style="margin-top:18px">there is one more, <strong>workflows</strong>, for chaining a lot of agents together. <strong>you will not need it this year.</strong></p>
   <aside class="note"><b>tell them to photograph this slide, it's the one they'll actually use on monday.</b> the last row is the one to say twice. and be honest about workflows being out of scope rather than pretending the list is complete, they'll respect the edge of the map more than a fake summary.</aside>
 </section>
 
