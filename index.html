@@ -164,9 +164,11 @@ p code,li code,h2 code,h3 code{font-family:var(--mono);color:var(--ui);font-size
 /* capped and centred, like .day.map. left-aligned full-bleed rows leave a wide screen
    looking half empty and push the answer column miles from the question. */
 .cheat{display:grid;gap:10px;margin-top:18px;max-width:min(100%,860px);margin-inline:auto}
-.cheat .r{display:grid;grid-template-columns:1fr 1fr;gap:16px;background:var(--card);border-radius:10px;padding:15px 22px;align-items:center}
+/* 1fr auto, not 1fr 1fr: the question takes whatever it needs and the answer sits flush
+   against the end of the row instead of stranded in the middle with dead space after it. */
+.cheat .r{display:grid;grid-template-columns:1fr auto;gap:24px;background:var(--card);border-radius:10px;padding:15px 22px;align-items:center}
 .cheat .r .q{font-size:clamp(14px,1.4vw,19px)}
-.cheat .r .a{font-family:var(--mono);color:var(--build);font-size:clamp(13px,1.3vw,18px);font-weight:500}
+.cheat .r .a{font-family:var(--mono);color:var(--build);font-size:clamp(13px,1.3vw,18px);font-weight:500;text-align:right}
 
 .wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:12px;margin-top:22px}
 .wcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center;opacity:0;transform:translateY(26px) scale(.9)}
@@ -318,6 +320,8 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
   .day.map .bodyc{flex-direction:column;align-items:flex-start;gap:1px;padding:4px 11px}
   .day.map .txt b{line-height:1.15}
   .conflict,.cheat .r{grid-template-columns:1fr}
+  .cheat .r{gap:4px}
+  .cheat .r .a{text-align:left}
   #help{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
