@@ -412,7 +412,7 @@ it is the same thing as the mac Terminal app or windows PowerShell, just living 
   data-terms="node|the program that lets your laptop run javascript outside a browser;;npm|the tool that downloads all the code your project depends on">
   <div class="eyebrow">two words you will hear constantly · <b>then we check you have them</b></div>
   <h2>one runs the code. the other fetches the code other people wrote.</h2>
-  <p style="margin-top:14px"><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project borrows code other people wrote, and npm goes and gets all of it. when a developer says <strong>"we need to bump that dependency"</strong>, this is the thing they mean.</p>
+  <p style="margin-top:14px"><strong>node</strong> is what actually runs our project. <strong>npm</strong> is the delivery service: our project borrows code other people wrote, and npm goes and gets all of it. <strong>that borrowing is the part worth knowing about</strong>, because it is why a feature can be held up by code nobody on your team wrote. if a borrowed piece does not do the thing you asked for, somebody has to upgrade it first, and upgrading it can break the pieces sitting next to it.</p>
   <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>node -v</code><button class="copy" data-copy="node -v">copy</button></div>
   <div class="cmd"><span class="os">mac · win</span><code>npm -v</code><button class="copy" data-copy="npm -v">copy</button></div>
   <div class="expect frag" data-frag="1">two version numbers, something like <em>v22.14.0</em> and <em>10.9.2</em>.
