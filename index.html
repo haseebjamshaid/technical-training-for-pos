@@ -466,23 +466,46 @@ for claude there is nothing to type. <em>look down the vs code sidebar for the c
 </section>
 
 <section class="slide" data-title="inside package.json" data-stage="build" data-seg="your machine" data-budget="19"
-  data-terms="package.json|the file that lists everything the project needs, plus the shortcuts for running it;;scripts|the named shortcuts inside package.json. npm run dev is one of them.">
-  <div class="eyebrow">open this file on your own screen · <b>this is the real one, all of it</b></div>
-  <h3 style="margin-bottom:14px">this is the entire package.json of the project you just cloned</h3>
+  data-terms="package.json|the file that lists everything the project needs, plus the shortcuts for running it">
+  <div class="eyebrow">open this file on your own screen · <b>this is the real one, every line of it</b></div>
+  <h3 style="margin-bottom:12px">the whole project, described in one small file</h3>
   <div class="expect">{
   "name": "team-wall",
+  "version": "1.0.0",
+  "private": true,
   <em>"scripts": {</em>
     <em>"dev": "next dev",</em>
-    "build": "next build"
+    "build": "next build",
+    "start": "next start"
   },
   <em>"dependencies": {</em>
     "next": "^16.2.12",
     "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3"
   }
 }</div>
-  <p style="margin-top:16px"><strong>"dependencies" is the shopping list.</strong> four names, four bits of code written by strangers that our site needs to run. <strong>"scripts" is the shortcuts.</strong> in two minutes you will type <code>npm run dev</code>, and that is not a real command anywhere in the world, it is just a nickname for <code>next dev</code> that somebody wrote on that line.</p>
-  <aside class="note"><b>open the real file on the projector next to this slide, they should match.</b> the scripts point lands hardest, because minutes later they type a command and now they know exactly where it came from. if anyone asks about <code>^16.2.12</code>, say "roughly this version or newer" and move on, that rabbit hole is twenty minutes deep.</aside>
+  <aside class="note"><b>open the real file next to this slide, they should match line for line.</b> do not explain it yet, just let them look at it for ten seconds and notice it is small and readable. the whole point of this slide is that the thing describing an entire website is twenty lines of plain text they could have written themselves. the next slide does the explaining.</aside>
+</section>
+
+<section class="slide" data-title="what package.json is telling you" data-stage="build" data-seg="your machine" data-budget="19"
+  data-terms="scripts|the named shortcuts inside package.json. npm run dev is one of them.">
+  <div class="eyebrow">four things in that file · <b>two of them matter to you</b></div>
+  <h2>what each part of it is for</h2>
+  <div class="cheat">
+    <div class="r"><div class="q">the shortcuts. you are about to type one.</div><div class="a">"scripts"</div></div>
+    <div class="r"><div class="q">the four borrowed things the site needs to run</div><div class="a">"dependencies"</div></div>
+    <div class="r"><div class="q">borrowed things needed only while building it</div><div class="a">"devDependencies"</div></div>
+    <div class="r"><div class="q">housekeeping. ignore these two.</div><div class="a">"name" · "version"</div></div>
+  </div>
+  <p style="margin-top:18px">the one worth remembering: <strong><code>npm run dev</code> is not a real command anywhere in the world.</strong> it is a nickname for <code>next dev</code> that somebody wrote on that scripts line, in that file, in this project.</p>
+  <aside class="note"><b>the scripts point lands hardest, because in a minute they type a command and now they know exactly where it came from and that somebody chose it.</b> "dependencies" versus "devDependencies" is worth one sentence and no more. if anyone asks about <code>^16.2.12</code>, say "roughly this version or newer" and move on, that rabbit hole is twenty minutes deep.</aside>
 </section>
 
 <section class="slide" data-title="command · npm install" data-stage="build" data-seg="your machine" data-budget="19" data-frags="1">
