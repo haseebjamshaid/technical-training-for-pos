@@ -127,15 +127,6 @@ p code,li code,h2 code,h3 code{font-family:var(--mono);color:var(--ui);font-size
 .pane h3{margin-bottom:8px}
 .pane p{font-size:clamp(14px,1.3vw,18px)}
 
-.reflog{display:grid;place-items:center;gap:26px;margin-top:14px;min-height:min(34vh,270px);overflow:hidden}
-.commit{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 28px;font-family:var(--mono);text-align:center;transition:transform .62s cubic-bezier(.5,0,.75,0),opacity .5s ease,border-color .4s}
-.commit .hash{color:var(--ui);font-size:15px}
-.commit .msg{font-size:clamp(15px,1.7vw,22px);color:var(--body);margin-top:7px;font-weight:500}
-.slide[data-frag="1"] .commit{transform:translateY(115%) rotate(9deg);opacity:0}
-.slide[data-frag="2"] .commit{transform:none;opacity:1;border-color:var(--build);transition:transform .7s cubic-bezier(.2,1.5,.4,1),opacity .3s ease,border-color .4s}
-.verdict{font-size:clamp(19px,2.5vw,33px);font-weight:500;text-align:center;min-height:1.4em}
-.slide[data-frag="1"] .verdict{color:var(--ship)}
-.slide[data-frag="2"] .verdict{color:var(--build)}
 
 .graph{margin-top:18px}
 .graph svg{width:100%;max-height:32vh}
@@ -261,7 +252,6 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
   .ring{width:54px;height:54px;margin-bottom:18px;font-size:20px}
   .wall{margin-top:16px} .wcard{padding:14px 11px} .wcard .em{font-size:22px}
   .graph svg{max-height:26vh}
-  .reflog{gap:18px;min-height:min(28vh,200px)}
 }
 
 /* very short · the nine-row tuesday slide is the tallest thing in the deck and still
@@ -347,7 +337,7 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
     <div class="eyebrow">carbonteq · 2 hours · you will type things</div>
     <h1 style="max-width:22ch">how a change gets from your ticket to a real website<span class="cursor"></span></h1>
     <p>and by the end of this, your name is on one. you clone the project, you make a change, you send it for review, and you watch it go live.</p>
-    <p><strong>three rules for the next two hours.</strong> one, stop me any time, there are no stupid questions in a room where everybody is learning the same thing. two, nobody moves on alone, we wait for the slowest screen. three, <strong>you cannot break anything today</strong>, and by the end you will know exactly why.</p>
+    <p><strong>two rules for the next two hours.</strong> one, stop me any time, there are no stupid questions in a room where everybody is learning the same thing. two, <strong>nobody moves on alone</strong>, we wait for the slowest screen.</p>
   </div>
   <aside class="note"><b>open by naming the promise, not the agenda.</b> ask for a show of hands: who has had claude or cursor run a git command and then had no idea what it did? that count sets your pace. keep laptops shut until stop 2 opens.</aside>
 </section>
@@ -397,7 +387,7 @@ body.ov-on #overview,body.gl-on #glossary{display:block}
 <!-- STOP 2 · YOUR MACHINE -->
 
 <section class="slide act" data-title="act · your machine" data-stage="build" data-seg="your machine" data-budget="19">
-  <div class="actnum">stop 2 of 7 · 19 minutes</div>
+  <div class="actnum">stop 2 of 6 · 19 minutes</div>
   <h1>first, does your laptop have the four things</h1>
   <div class="actdo"><span>vs code</span><span>node</span><span>git</span><span>the claude extension</span></div>
   <p style="margin-top:24px">open your laptops now. we check all four, one at a time, and nobody moves on until every screen is green. <strong>everything today happens inside vs code</strong>, including the terminal, so that is the one thing you must already have installed.</p>
@@ -452,13 +442,13 @@ for claude there is nothing to type. <em>look down the vs code sidebar for the c
   data-terms="repo|the project folder, with a full history of every change anyone has ever made to it;;clone|to download your own complete copy of a repo">
   <div class="eyebrow">what we are downloading · <b>and then downloading it</b></div>
   <h2>a project folder that remembers every change anyone has ever made to it</h2>
-  <p style="margin-top:14px">it looks like an ordinary folder. the difference is the complete history attached: who changed what, when, and why. <strong>you never lose an old version</strong>, which is the most useful property of the whole system, and the reason this session ends the way it does.</p>
+  <p style="margin-top:14px">it looks like an ordinary folder. the difference is the complete history attached: who changed what, when, and why. <strong>you never lose an old version</strong>, which is the most useful property of the whole system.</p>
   <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>git clone https://github.com/abdulhaseeb08/technical-training-pos.git</code><button class="copy" data-copy="git clone https://github.com/abdulhaseeb08/technical-training-pos.git">copy</button></div>
   <div class="cmd"><span class="os">mac · win</span><code>cd technical-training-pos</code><button class="copy" data-copy="cd technical-training-pos">copy</button></div>
   <div class="expect frag" data-frag="1"><em>Cloning into 'technical-training-pos'... done.</em>
 
 <s>the second command is the one people forget.</s> clone puts the folder next to you, cd walks you into it.</div>
-  <aside class="note"><b>plant the seed here for stop 6: "you never lose an old version" is the line you cash in when everyone deletes their work on purpose.</b> then open the folder in vs code, file, open folder, pick <code>technical-training-pos</code> itself and not the folder above it. claude reads the house rules from the folder you open, so opening the parent silently gives you a claude with no rules. make them read their terminal prompt out loud too.</aside>
+  <aside class="note"><b>open the folder in vs code now: file, open folder, pick <code>technical-training-pos</code> itself and not the folder above it.</b> claude reads the house rules from the folder you open, so opening the parent silently gives you a claude with no rules. make them read their terminal prompt out loud too.</aside>
 </section>
 
 <section class="slide" data-title="explain · dependencies" data-stage="build" data-seg="your machine" data-budget="19"
@@ -573,7 +563,7 @@ leave this terminal running. it has to stay open.</div>
 <!-- STOP 3 · GIT IN FOUR WORDS -->
 
 <section class="slide act" data-title="act · git in four words" data-stage="build" data-seg="git in four words" data-budget="15">
-  <div class="actnum">stop 3 of 7 · 15 minutes</div>
+  <div class="actnum">stop 3 of 6 · 15 minutes</div>
   <h1>git is only four ideas. everything else is detail.</h1>
   <div class="actdo"><span>repo</span><span>commit</span><span>branch</span><span>pull request</span></div>
   <p style="margin-top:24px">you already have the first one. we'll do the other three now, and you'll use all four before we leave.</p>
@@ -632,7 +622,7 @@ leave this terminal running. it has to stay open.</div>
       <text class="glabel" x="770" y="222" text-anchor="middle">merged back in</text>
     </svg>
   </div>
-  <aside class="note"><b>let the animation finish before you talk over it.</b> then trace it with your finger: grey line is the shared project, green detour is you, purple dot is the moment your work becomes everyone's. that purple dot is the merge, which is stop 7.</aside>
+  <aside class="note"><b>let the animation finish before you talk over it.</b> then trace it with your finger: grey line is the shared project, green detour is you, purple dot is the moment your work becomes everyone's. that purple dot is the merge, which is stop 6.</aside>
 </section>
 
 <section class="slide" data-title="command · checkout -b" data-stage="build" data-seg="git in four words" data-budget="15" data-frags="1">
@@ -660,22 +650,22 @@ no spaces, no capitals.</div>
     <li>a save point with a note is a <i>commit</i></li>
     <li>your private copy is a <i>branch</i>, the shared one is <i>main</i></li>
     <li>you made your own and you're standing in it <i>git checkout -b</i></li>
-    <li>the fourth word, <i>pull request</i>, comes when we ship <i>stop 7</i></li>
+    <li>the fourth word, <i>pull request</i>, comes when we ship <i>stop 6</i></li>
   </ul>
   <aside class="note"><b>send them to break on a cliffhanger.</b> "when you come back you're going to write actual code, and then delete it on purpose." that sentence gets people back on time.</aside>
 </section>
 
 <!-- STOP 4 · THE THREE PIECES -->
 
-<section class="slide act" data-title="act · the three pieces" data-stage="build" data-seg="the three pieces" data-budget="8">
-  <div class="actnum">stop 4 of 7 · 8 minutes</div>
+<section class="slide act" data-title="act · the three pieces" data-stage="build" data-seg="the three pieces" data-budget="10">
+  <div class="actnum">stop 4 of 6 · 10 minutes</div>
   <h1>it's running. so what is it actually made of?</h1>
   <div class="actdo"><span>the screen</span><span>the middle bit</span><span>the store</span></div>
   <p style="margin-top:24px">every app you have ever used is three things talking to each other. once you can name all three, a lot of what devs say in standups stops being noise.</p>
   <aside class="note"><b>this is the only stretch of the day with no typing in it, and it's earned because the real thing is open on their screens.</b> point at their laptops rather than the slide wherever you can. ten minutes, then straight back into git.</aside>
 </section>
 
-<section class="slide" data-title="explain · the three pieces" data-stage="build" data-seg="the three pieces" data-budget="8"
+<section class="slide" data-title="explain · the three pieces" data-stage="build" data-seg="the three pieces" data-budget="10"
   data-terms="ui|the part you can see and click. also called the front end, or the client.;;server|the part that receives requests and decides what to do about them. also called the back end.;;database|where the data actually lives, so it's still there after everyone closes the tab.">
   <div class="eyebrow">plain english first · <b>the names they use come second</b></div>
   <h2>what you look at, what fetches it, and where it's kept</h2>
@@ -688,7 +678,7 @@ no spaces, no capitals.</div>
   <aside class="note"><b>the three words they'll actually hear are ui, api and database, but say the plain version first every single time.</b> the full-stack line is worth including because it's a phrase they read in job titles constantly and it turns out to mean something very simple. if someone asks about microservices, that's workshop two.</aside>
 </section>
 
-<section class="slide" data-title="explain · api" data-stage="build" data-seg="the three pieces" data-budget="8"
+<section class="slide" data-title="explain · api" data-stage="build" data-seg="the three pieces" data-budget="10"
   data-terms="api|an address that hands back raw data instead of a web page;;endpoint|one specific api address, like /api/team">
   <div class="eyebrow">hania asked for this one · <b>do it on your own screen</b></div>
   <div class="stack">
@@ -699,7 +689,7 @@ no spaces, no capitals.</div>
   <aside class="note"><b>have the whole room open the api tab. twenty seconds, and the word is permanently demystified.</b> then open devtools network tab on the main page and show the same request happening on its own. "the page is a wrapper around that ugly text" is the sentence that makes it stick.</aside>
 </section>
 
-<section class="slide" data-title="the request, end to end" data-stage="build" data-seg="the three pieces" data-budget="8" data-frags="5">
+<section class="slide" data-title="the request, end to end" data-stage="build" data-seg="the three pieces" data-budget="10" data-frags="5">
   <div class="eyebrow">something you have all done a hundred times · <b>ordering something online</b></div>
   <h2>you hit "place order". here is everything that happens next.</h2>
   <div class="day">
@@ -713,7 +703,7 @@ no spaces, no capitals.</div>
   <aside class="note"><b>use the order analogy, not the app's own, because every single person in the room has done it and felt each step.</b> the spinning button is step two, the "card declined" message is step three, and "your order is still in your account tomorrow" is step four. once they have felt it, map it onto the team wall in one sentence and move on.</aside>
 </section>
 
-<section class="slide" data-title="explain · the four asks" data-stage="build" data-seg="the three pieces" data-budget="8"
+<section class="slide" data-title="explain · the four asks" data-stage="build" data-seg="the three pieces" data-budget="10"
   data-terms="GET|asking for something. the safe one, it changes nothing.;;POST|sending something new to be saved;;PUT|replacing a whole thing with a new version of it;;PATCH|changing one part of a thing and leaving the rest alone;;DELETE|removing something">
   <div class="eyebrow">screenshot this one</div>
   <h2>there are only four things you can ask an api to do</h2>
@@ -727,7 +717,7 @@ no spaces, no capitals.</div>
   <aside class="note"><b>tie each row back to the wall app so none of it stays abstract:</b> loading the page is a GET, adding your card is a POST, changing your emoji would be a PATCH, taking your card off would be a DELETE. four asks mirrors "git is only four ideas" on purpose, so use the same phrasing.</aside>
 </section>
 
-<section class="slide" data-title="explain · what comes back" data-stage="build" data-seg="the three pieces" data-budget="8"
+<section class="slide" data-title="explain · what comes back" data-stage="build" data-seg="the three pieces" data-budget="10"
   data-terms="200|it worked;;404|you asked for something that isn't there;;403|you're not allowed to do that;;500|the server itself broke. not your fault.">
   <div class="eyebrow">the numbers in every error screenshot you have ever been sent</div>
   <h2>every answer comes back with a number attached</h2>
@@ -744,7 +734,7 @@ no spaces, no capitals.</div>
 <!-- STOP 5 · THE HARNESS -->
 
 <section class="slide act" data-title="act · the harness" data-stage="build" data-seg="the harness" data-budget="28">
-  <div class="actnum">stop 5 of 7 · 28 minutes</div>
+  <div class="actnum">stop 5 of 6 · 28 minutes</div>
   <h1>now you write code. and you put a harness on the thing writing it.</h1>
   <div class="actdo"><span>claude in vs code</span><span>house rules</span><span>rules</span><span>skills</span><span>agents</span><span>permissions</span></div>
   <p style="margin-top:24px">most of you already use claude. we are not here to teach you to prompt better. we are here to show you the files that make it behave the same way every time, on every machine, for everybody on the team.</p>
@@ -868,21 +858,20 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   data-terms="agent|a separate claude with one job and a shorter list of tools it is allowed to use">
   <div class="eyebrow">part four of five · <b>.claude/agents/</b></div>
   <h2 class="subject">.claude/agents/</h2>
-  <p class="subline">a separate claude, with one job and a shorter list of things it can touch.</p>
+  <p class="subline">a separate claude with one job and a shorter list of tools. <strong>not a smarter claude, a narrower one.</strong></p>
   <div class="split">
     <div class="pane pain">
       <span class="tag">the main chat</span>
       <h3>can do everything</h3>
-      <p>read, write, run terminal commands, run git. useful, and it is holding your whole conversation in its head.</p>
+      <p>read, write, run terminal commands, run git. useful, and holding your whole conversation in its head.</p>
     </div>
     <div class="pane fix">
       <span class="tag">the developer agent</span>
       <h3>can only write files</h3>
-      <p><strong>it has no terminal at all.</strong> it physically cannot run git, commit, or push, no matter what anybody types at it. that is not a rule being obeyed. it is a missing tool.</p>
+      <p><strong>it has no terminal.</strong> it cannot run git, commit, or push, whatever anybody types at it. that is not a rule being obeyed, it is a missing tool.</p>
     </div>
   </div>
-  <p style="margin-top:16px">this project has one agent, called <code>developer</code>. it takes a job and writes the one file. <strong>an agent isn't a smarter claude, it's a narrower one</strong>, and narrower is safer.</p>
-  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> if somebody asks why you would not just tell the main chat not to run git, that is the very next slide, so hold the thought and use their question to introduce it.</aside>
+  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> this project's one agent is called <code>developer</code>, say the name out loud so they recognise it when they invoke it. if somebody asks why you would not just tell the main chat not to run git, that is the very next slide, so hold the thought and use their question to introduce it.</aside>
 </section>
 
 <section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
@@ -970,105 +959,32 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
     <li>pasted a ticket and got back exactly one file <i>plan → developer → add-member</i></li>
     <li>read the diff before accepting it <i>diff</i></li>
   </ul>
-  <aside class="note"><b>lead into the next stop with the promise you planted back in stop 2:</b> "i said you never lose an old version. next twelve minutes we prove it, and you are all going to delete your work on purpose to find out."</aside>
+  <aside class="note"><b>lead straight into shipping:</b> "everything you just built is sitting on your laptop and nowhere else. nobody can see it, nobody can use it. the rest of the session is getting it in front of people."</aside>
 </section>
 
-<!-- STOP 6 · THE UNDO KIT -->
+<!-- STOP 6 · SHIPPING IT -->
 
-<section class="slide act" data-title="act · the undo kit" data-stage="build" data-seg="the undo kit" data-budget="12">
-  <div class="actnum">stop 6 of 7 · 12 minutes</div>
-  <h1>we're going to delete your work on purpose</h1>
-  <div class="actdo"><span>commit</span><span>the disaster</span><span>the rescue</span></div>
-  <p style="margin-top:24px">and then get it back. this is the part you'll actually remember in six months.</p>
-  <aside class="note"><b>announce this clearly and let the discomfort sit for a second.</b> the act only works because the loss feels real. do not reassure them in advance, that's exactly what ruins it.</aside>
-</section>
-
-<section class="slide" data-title="command · commit" data-stage="build" data-seg="the undo kit" data-budget="12" data-frags="1">
-  <div class="eyebrow">save your checkpoint first</div>
-  <h3 style="margin-bottom:18px">save your work, with a note</h3>
-  <div class="cmd"><span class="os">mac · win</span><code>git add .</code><button class="copy" data-copy="git add .">copy</button></div>
-  <div class="cmd"><span class="os">mac · win</span><code>git commit -m "add me to the team wall"</code><button class="copy" data-copy='git commit -m "add me to the team wall"'>copy</button></div>
-  <div class="expect frag" data-frag="1"><em>1 file changed, 6 insertions(+)</em>
-
-<code>add</code> picks what goes in the box.
-<code>commit</code> closes the box and labels it.</div>
-  <aside class="note"><b>the box analogy handles the add/commit two-step, which confuses everyone the first time.</b> don't get pulled into explaining the staging area properly. "add picks, commit saves" is enough for today.</aside>
-</section>
-
-<section class="slide" data-title="explain · the hash" data-stage="build" data-seg="the undo kit" data-budget="12"
-  data-terms="hash|the unique id of a save point. seven characters, and it's how you find your way back">
-  <div class="eyebrow">run this, then look at the left column</div>
-  <div class="stack">
-    <h2>every save point gets a unique id. that id is how you find your way back.</h2>
-    <span class="term">hash</span>
-  </div>
-  <div class="cmd" style="margin-top:18px"><span class="os">mac · win</span><code>git log --oneline</code><button class="copy" data-copy="git log --oneline">copy</button></div>
-  <p style="margin-top:14px">those seven characters on the left of each line are hashes. <strong>that id is how you point at one exact moment in this project's history</strong>, and in about five minutes you're going to use one to bring your work back from the dead.</p>
-  <aside class="note"><b>this quietly answers hamza's question properly, now that they have the vocabulary for it.</b> have them copy their newest hash into a notes app right now, because they're about to need it.</aside>
-</section>
-
-<section class="slide" data-title="the disaster" data-stage="build" data-seg="the undo kit" data-budget="12" data-frags="1">
-  <div class="eyebrow">everyone, together, on three</div>
-  <h3 style="margin-bottom:18px">now destroy it</h3>
-  <div class="cmd"><span class="os">mac · win</span><code>git reset --hard HEAD~1</code><button class="copy" data-copy="git reset --hard HEAD~1">copy</button></div>
-  <div class="expect frag" data-frag="1">check <code>git log --oneline</code> again.
-check your file.
-
-<s>your commit is gone. your card is gone.</s></div>
-  <aside class="note"><b>count them in, have the whole room run it at the same time, then say nothing for five full seconds.</b> that silence is the most valuable pause in the workshop. let someone say "wait, what" before you move on.</aside>
-</section>
-
-<section class="slide" data-title="the rescue" data-stage="build" data-seg="the undo kit" data-budget="12" data-frags="2"
-  data-terms="reflog|git's private record of everywhere you have been. it survives deletes and resets for about 30 days">
-  <div class="eyebrow">now watch</div>
-  <div class="reflog">
-    <div class="commit"><div class="hash">a4f9c2e</div><div class="msg">add me to the team wall</div></div>
-    <div class="verdict frag" data-frag="1">gone.</div>
-  </div>
-  <div class="expect frag" data-frag="2">git reflog
-<em>a4f9c2e HEAD@{1}: commit: add me to the team wall</em>
-
-git reset --hard a4f9c2e
-<em>HEAD is now at a4f9c2e</em></div>
-  <aside class="note"><b>the takeaway sentence, say it exactly:</b> "for about thirty days, git remembers everywhere you have been. you can almost always get back." after this act they experiment instead of freezing, which is the entire behavioural goal of the session.</aside>
-</section>
-
-<section class="slide" data-title="the undo cheat sheet" data-stage="build" data-seg="the undo kit" data-budget="12">
-  <div class="eyebrow">screenshot this one</div>
-  <h2>three situations, three answers</h2>
-  <div class="cheat">
-    <div class="r"><div class="q">i messed up a file and haven't saved a checkpoint</div><div class="a">git restore &lt;file&gt;</div></div>
-    <div class="r"><div class="q">my last checkpoint was wrong</div><div class="a">git reset --soft HEAD~1</div></div>
-    <div class="r"><div class="q">i have genuinely lost something</div><div class="a">git reflog</div></div>
-  </div>
-  <p style="margin-top:18px">and the rule underneath all three: <strong>if you're not sure, don't type anything, ask a dev.</strong> nothing gets worse while you wait.</p>
-  <aside class="note"><b>tell them to photograph this slide.</b> the last line matters more than the four commands: the expensive mistakes happen when a panicking person keeps typing. waiting is always safe.</aside>
-</section>
-
-<section class="slide" data-title="recap · stop 6" data-stage="build" data-seg="the undo kit" data-budget="12">
-  <div class="eyebrow">what just happened</div>
-  <h2>you deleted your work and got it back</h2>
-  <ul class="recap">
-    <li>saved a checkpoint with a note <i>git add · git commit</i></li>
-    <li>saw that every checkpoint has an id <i>git log --oneline</i></li>
-    <li>destroyed it <i>git reset --hard</i></li>
-    <li>found it again <i>git reflog</i></li>
-    <li>nothing was ever actually gone <i>~30 days</i></li>
-  </ul>
-  <aside class="note"><b>the last line is the thesis of the whole workshop, deliver it as one.</b> this is the sentence you want them repeating to a colleague on monday.</aside>
-</section>
-
-<!-- STOP 7 · SHIPPING IT -->
-
-<section class="slide act" data-title="act · shipping it" data-stage="check" data-seg="shipping it" data-budget="20">
-  <div class="actnum">stop 7 of 7 · 20 minutes</div>
+<section class="slide act" data-title="act · shipping it" data-stage="check" data-seg="shipping it" data-budget="28">
+  <div class="actnum">stop 6 of 6 · 28 minutes</div>
   <h1>time to get it off your laptop and in front of people</h1>
   <div class="actdo"><span>push</span><span>pull request</span><span>review</span><span>conflict</span><span>merge</span><span>live</span></div>
   <p style="margin-top:24px">everything so far happened on your machine only. the rest of the session is the other two stages: check, then ship.</p>
   <aside class="note"><b>point at the strip along the bottom, it's about to move for the first time in an hour.</b> this stop runs long more often than not. if you're behind, trim the PR screen walkthrough rather than the checkpoint, and never skip the live site at the end.</aside>
 </section>
 
-<section class="slide" data-title="command · push" data-stage="check" data-seg="shipping it" data-budget="20" data-frags="1">
+<section class="slide" data-title="command · commit" data-stage="check" data-seg="shipping it" data-budget="28" data-frags="1">
+  <div class="eyebrow">first, save it properly</div>
+  <h3 style="margin-bottom:18px">two commands, and your card is a save point</h3>
+  <div class="cmd"><span class="os">mac · win</span><code>git add .</code><button class="copy" data-copy="git add .">copy</button></div>
+  <div class="cmd"><span class="os">mac · win</span><code>git commit -m "add me to the team wall"</code><button class="copy" data-copy='git commit -m "add me to the team wall"'>copy</button></div>
+  <div class="expect frag" data-frag="1"><em>1 file changed, 6 insertions(+)</em>
+
+<code>add</code> picks what goes in the box.
+<code>commit</code> closes the box and labels it.</div>
+  <aside class="note"><b>the box analogy handles the add/commit two-step, which confuses everyone the first time.</b> don't get pulled into explaining the staging area properly, "add picks, commit saves" is enough for today. this is also the answer to "why didn't my file show up on github", so expect it again in ten minutes.</aside>
+</section>
+
+<section class="slide" data-title="command · push" data-stage="check" data-seg="shipping it" data-budget="28" data-frags="1">
   <div class="eyebrow">send your copy up to github</div>
   <h3 style="margin-bottom:18px">put your branch somewhere other than your laptop</h3>
   <div class="cmd"><span class="os">mac · win</span><code>git push -u origin add/yourname</code><button class="copy" data-copy="git push -u origin add/yourname">copy</button></div>
@@ -1078,7 +994,7 @@ github will print a link. don't click it yet.</div>
   <aside class="note"><b>this is where login problems surface if the prereq wasn't done.</b> anyone hitting an auth wall needs <code>gh auth login</code>, which is exactly why it was on the prereq list. pair them with a neighbour rather than debugging live.</aside>
 </section>
 
-<section class="slide" data-title="explain · pull request" data-stage="check" data-seg="shipping it" data-budget="20"
+<section class="slide" data-title="explain · pull request" data-stage="check" data-seg="shipping it" data-budget="28"
   data-terms="pull request|a formal request to have your copy checked and then folded into the shared one;;PR|short for pull request, and what everyone actually says out loud">
   <div class="eyebrow">the fourth and last git word</div>
   <div class="stack">
@@ -1089,7 +1005,7 @@ github will print a link. don't click it yet.</div>
   <aside class="note"><b>the word POs hear most and understand least.</b> "in review" is a status they report upward constantly. after this slide they know it means a specific page with a specific button on it.</aside>
 </section>
 
-<section class="slide" data-title="the PR screen" data-stage="check" data-seg="shipping it" data-budget="20">
+<section class="slide" data-title="the PR screen" data-stage="check" data-seg="shipping it" data-budget="28">
   <div class="eyebrow">open the link github gave you</div>
   <h2>three things to look at, and nothing else</h2>
   <div class="stages">
@@ -1101,7 +1017,7 @@ github will print a link. don't click it yet.</div>
   <aside class="note"><b>walk the real PR on the projector.</b> deliberately telling them what to ignore is more useful than explaining every tab. POs get overwhelmed by github's UI, and permission to ignore 80% of it is a gift.</aside>
 </section>
 
-<section class="slide" data-title="explain · ci" data-stage="check" data-seg="shipping it" data-budget="20"
+<section class="slide" data-title="explain · ci" data-stage="check" data-seg="shipping it" data-budget="28"
   data-terms="CI|robots that automatically build and test your change the moment you open a PR;;the build is red|one of those automated steps failed. nothing is on fire.">
   <div class="eyebrow">eman asked for this one</div>
   <div class="stack">
@@ -1112,14 +1028,14 @@ github will print a link. don't click it yet.</div>
   <aside class="note"><b>demystifying "the build is red" is worth a lot to this room.</b> they hear it in standups and assume crisis. name it as routine. your github action running <code>npm run build</code> is the live example, point at the check running on the PR.</aside>
 </section>
 
-<section class="slide checkpoint" data-title="checkpoint · PR" data-stage="check" data-seg="shipping it" data-budget="20">
+<section class="slide checkpoint" data-title="checkpoint · PR" data-stage="check" data-seg="shipping it" data-budget="28">
   <div class="ring">✓</div>
   <h2>is your PR open, with a green tick?</h2>
   <p style="margin-top:20px">your name should be on the list of open pull requests. if your check is red, that's interesting rather than bad. put your hand up and we'll read it together.</p>
   <aside class="note"><b>if someone genuinely gets a red check, do not fix it quietly.</b> put it on the projector and read the log together. an unplanned real failure is the best teaching moment you'll get all day.</aside>
 </section>
 
-<section class="slide" data-title="the conflict" data-stage="check" data-seg="shipping it" data-budget="20" data-frags="1"
+<section class="slide" data-title="the conflict" data-stage="check" data-seg="shipping it" data-budget="28" data-frags="1"
   data-terms="merge conflict|two people changed the same line, so git stops and asks a human which one is right">
   <div class="eyebrow">a word you'll hear in a panicked voice one day · <b>and why it did not happen to you</b></div>
   <h2>when two people edit the same line, git refuses to guess</h2>
@@ -1135,7 +1051,7 @@ it's asking a question: <em>which of these two lines should survive?</em></div>
   <aside class="note"><b>explain this one on the projector, do not stage it.</b> we're deliberately not creating real conflicts today, there isn't time to walk fifteen people back out of one. what matters is that they stop hearing "merge conflict" as a disaster: it's git asking a question, and the answer is a human choosing. if someone wants to see one resolved, that's a five-minute follow-up over their shoulder another day.</aside>
 </section>
 
-<section class="slide" data-title="explain · merge and deploy" data-stage="ship" data-seg="shipping it" data-budget="20"
+<section class="slide" data-title="explain · merge and deploy" data-stage="ship" data-seg="shipping it" data-budget="28"
   data-terms="merge|folding your copy back into the shared one. now it's real.;;deploy|copying the finished code onto the servers users actually reach">
   <div class="eyebrow">the last two words of the day</div>
   <div class="stack">
@@ -1146,7 +1062,7 @@ it's asking a question: <em>which of these two lines should survive?</em></div>
   <aside class="note"><b>merge and deploy being two different things is the distinction POs most often collapse.</b> "it's merged" and "it's live" are different sentences, and the gap between them is where a lot of PO/dev confusion lives.</aside>
 </section>
 
-<section class="slide" data-title="the wall" data-stage="ship" data-seg="shipping it" data-budget="20">
+<section class="slide" data-title="the wall" data-stage="ship" data-seg="shipping it" data-budget="28">
   <div class="eyebrow">refresh the live site</div>
   <h2>that's all of you, on the internet</h2>
   <div class="wall">
@@ -1164,21 +1080,21 @@ it's asking a question: <em>which of these two lines should survive?</em></div>
 
 <!-- CLOSE -->
 
-<section class="slide" data-title="the day, all of it" data-stage="ship" data-seg="close" data-budget="5">
+<section class="slide" data-title="the day, all of it" data-stage="ship" data-seg="close" data-budget="7">
   <div class="eyebrow">back where we started · <b>two hours later</b></div>
   <h2>you did all of it</h2>
   <div class="day">
     <div class="row" data-stage="plan"><div class="t">9:30</div><div class="dot"></div><div class="bodyc"><b>you already wrote the ticket</b><span>this was always yours</span></div></div>
     <div class="row" data-stage="build"><div class="t">9:47</div><div class="dot"></div><div class="bodyc"><b>clone, branch, install, run</b><span>you did this</span></div></div>
     <div class="row" data-stage="build"><div class="t">10–1</div><div class="dot"></div><div class="bodyc"><b>wrote code with claude, read the diff</b><span>you did this</span></div></div>
-    <div class="row" data-stage="build"><div class="t">1:30</div><div class="dot"></div><div class="bodyc"><b>broke it and got it back</b><span>you did this too</span></div></div>
+    <div class="row" data-stage="build"><div class="t">1:30</div><div class="dot"></div><div class="bodyc"><b>saved a checkpoint and pushed the branch up</b><span>you did this too</span></div></div>
     <div class="row" data-stage="check"><div class="t">2:10</div><div class="dot"></div><div class="bodyc"><b>opened a PR, watched the checks, fixed a conflict</b><span>and this</span></div></div>
     <div class="row" data-stage="ship"><div class="t">3:30</div><div class="dot"></div><div class="bodyc"><b>merged, deployed, live</b><span>and it's on the internet right now</span></div></div>
   </div>
   <aside class="note"><b>point at each row and name the person in the room who struggled with it and got through it.</b> specific beats general. this is the last thing they'll remember from the session.</aside>
 </section>
 
-<section class="slide" data-title="monday" data-stage="ship" data-seg="close" data-budget="5">
+<section class="slide" data-title="monday" data-stage="ship" data-seg="close" data-budget="7">
   <div class="eyebrow">three things to actually take with you</div>
   <h2>what to do on monday</h2>
   <ul class="recap">
@@ -1189,11 +1105,11 @@ it's asking a question: <em>which of these two lines should survive?</em></div>
   <aside class="note"><b>keep the homework to three items and make all three take under a minute.</b> the glossary is the phrasebook artifact, make sure they know the deck url is theirs to keep and that <code>g</code> works forever.</aside>
 </section>
 
-<section class="slide" data-title="end" data-stage="ship" data-seg="close" data-budget="5">
+<section class="slide" data-title="end" data-stage="ship" data-seg="close" data-budget="7">
   <div class="stack">
     <div class="eyebrow">that's it · <b>questions, then food</b></div>
-    <h1 style="max-width:18ch">nothing you break is permanent<span class="cursor"></span></h1>
-    <p>that was the whole point. the terminal isn't dangerous, git remembers everything, and claude does what you tell it to once you write the rules down. workshop two is the check and ship stages properly: testing, pipelines, environments, and what happens when something breaks in production.</p>
+    <h1 style="max-width:18ch">you shipped to production today<span class="cursor"></span></h1>
+    <p>a ticket, a branch, a commit, a pull request, a green check, a deploy. that is the whole loop, and it is the same loop whether the change is one line of copy or an entire feature. workshop two is the check and ship stages properly: testing, pipelines, environments, and what happens when something breaks in production.</p>
   </div>
   <aside class="note"><b>close on the thesis, not on a thank-you slide.</b> then take questions with the glossary open on screen, it gives quieter people something to point at instead of having to phrase a question from scratch.</aside>
 </section>
