@@ -858,7 +858,7 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
   data-terms="agent|a separate claude with one job and a shorter list of tools it is allowed to use">
   <div class="eyebrow">part four of five · <b>.claude/agents/</b></div>
   <h2 class="subject">.claude/agents/</h2>
-  <p class="subline">a separate claude with one job and a shorter list of tools. <strong>not a smarter claude, a narrower one.</strong></p>
+  <p class="subline">the same claude as the main chat, with one job and <strong>only the tools you chose to give it.</strong></p>
   <div class="split">
     <div class="pane pain">
       <span class="tag">the main chat</span>
@@ -868,10 +868,10 @@ that's the whole point, and it's also the whole risk. the rest of this stop is a
     <div class="pane fix">
       <span class="tag">the developer agent</span>
       <h3>can only write files</h3>
-      <p><strong>it has no terminal.</strong> it cannot run git, commit, or push, whatever anybody types at it. that is not a rule being obeyed, it is a missing tool.</p>
+      <p><strong>we did not give it a terminal.</strong> so it cannot run git, commit, or push, whatever anybody types at it. that is not a rule being obeyed, it is a missing tool.</p>
     </div>
   </div>
-  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> this project's one agent is called <code>developer</code>, say the name out loud so they recognise it when they invoke it. if somebody asks why you would not just tell the main chat not to run git, that is the very next slide, so hold the thought and use their question to introduce it.</aside>
+  <aside class="note"><b>"no terminal, so it cannot run git" is the sentence that makes agents click for this room.</b> this project's one agent is called <code>developer</code>, say the name out loud so they recognise it when they invoke it. if somebody asks why you would not just tell the main chat not to run git, that is the very next slide, so hold the thought and use their question to introduce it. <b>if somebody who has read the docs says "agents can use the terminal", they are right and it does not dent the point:</b> leave the tool list out and an agent inherits everything. we wrote one, so it gets six tools and no terminal. same reason it runs on the same model as your main chat, we just never asked for a different one.</aside>
 </section>
 
 <section class="slide" data-title="asks vs forbids" data-stage="build" data-seg="the harness" data-budget="28" data-frags="1"
